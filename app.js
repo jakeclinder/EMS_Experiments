@@ -20,8 +20,8 @@ const ITEMS = [
 // ── RENDER ITEMS TABLE ────────────────────────────────────────────────
 function renderItems() {
   const tbody = document.getElementById('items-tbody');
-  tbody.innerHTML = ITEMS.map(item => `
-    <tr>
+  tbody.innerHTML = ITEMS.map((item, i) => `
+    <tr data-item-index="${i}">
       <td class="col-name">${item.name}</td>
       <td class="col-code">${item.code}</td>
       <td class="col-price">${item.price}</td>
@@ -33,6 +33,13 @@ function renderItems() {
       </td>
     </tr>
   `).join('');
+
+  tbody.querySelectorAll('tr').forEach(row => {
+    row.addEventListener('click', () => {
+      const idx = parseInt(row.dataset.itemIndex, 10);
+      openFlyout(ITEMS[idx]);
+    });
+  });
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────
@@ -57,6 +64,79 @@ function navigate(pageId) {
 document.querySelectorAll('[data-page]').forEach(el => {
   el.addEventListener('click', () => navigate(el.dataset.page));
 });
+
+// ── FLYOUT ────────────────────────────────────────────────────────────
+const overlay   = document.getElementById('flyout-overlay');
+const flyout    = document.getElementById('edit-flyout');
+const stockSel  = document.getElementById('f-stock');
+const stockBadge = document.getElementById('f-stock-badge');
+
+function openFlyout(item) {
+  // Populate fields
+  document.getElementById('f-item-name').value   = item.name;
+  document.getElementById('f-item-code').value   = item.code;
+  document.getElementById('f-prep-ticket').value  = item.name;
+  document.getElementById('f-receipt-name').value = item.name;
+
+  const rawPrice = parseFloat(item.price.replace('$', ''));
+  document.getElementById('f-price').value     = rawPrice.toFixed(2);
+  document.getElementById('f-price-tax').value = (rawPrice * 1.16).toFixed(2);
+
+  // Display On checkboxes
+  const display = item.displayOn;
+  document.getElementById('f-show-pos').checked   = display.includes('POS');
+  document.getElementById('f-show-olo').checked   = display.includes('OLO');
+  document.getElementById('f-show-kiosk').checked = display.includes('KIOSK');
+
+  // Stock tab
+  const stockVal = item.inStock ? 'in' : 'out';
+  stockSel.value = stockVal;
+  updateStockBadge(stockVal);
+
+  // Reset to details tab
+  switchFlyoutTab('details');
+
+  overlay.classList.add('open');
+  flyout.classList.add('open');
+}
+
+function closeFlyout() {
+  overlay.classList.remove('open');
+  flyout.classList.remove('open');
+}
+
+function switchFlyoutTab(tabId) {
+  document.querySelectorAll('.flyout-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.flyoutTab === tabId)
+  );
+  document.querySelectorAll('.flyout-tab-content').forEach(c =>
+    c.classList.toggle('active', c.id === 'flyout-tab-' + tabId)
+  );
+  document.getElementById('flyout-footer-details').style.display = tabId === 'details' ? '' : 'none';
+  document.getElementById('flyout-footer-stock').style.display   = tabId === 'stock'   ? '' : 'none';
+}
+
+function updateStockBadge(val) {
+  const labels = { in: 'In Stock', out: 'Out of Stock', limited: 'Limited' };
+  const classes = { in: 'badge-in-stock', out: 'badge-out-of-stock', limited: 'badge-limited' };
+  stockBadge.textContent = labels[val] || 'In Stock';
+  stockBadge.className = 'flyout-stock-badge ' + (classes[val] || 'badge-in-stock');
+}
+
+// Flyout tab switching
+document.querySelectorAll('.flyout-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchFlyoutTab(tab.dataset.flyoutTab));
+});
+
+// Close handlers
+overlay.addEventListener('click', closeFlyout);
+document.getElementById('flyout-close-btn').addEventListener('click', closeFlyout);
+document.querySelectorAll('.flyout-cancel-btn').forEach(btn =>
+  btn.addEventListener('click', closeFlyout)
+);
+
+// Stock badge live update
+stockSel.addEventListener('change', () => updateStockBadge(stockSel.value));
 
 // ── INIT ──────────────────────────────────────────────────────────────
 renderItems();
