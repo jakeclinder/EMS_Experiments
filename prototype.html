@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAKE — Enterprise Menu System</title>
+  <style>
+/* ── RESET & BASE ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  background: #f4f4f4;
+  color: #333;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ──────────────────────────────────────────────────────── */
+.topbar {
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 20px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.topbar-logo {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.cake-logo {
+  font-size: 26px;
+  font-weight: 900;
+  color: #E8651A;
+  letter-spacing: 1px;
+  font-family: Georgia, serif;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.cake-logo-e {
+  /* The crossed E / Ē character in the screenshot */
+}
+
+.topbar-location {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbar-bell {
+  position: relative;
+  cursor: default;
+}
+
+.bell-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #E8651A;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  background: #e8e8e8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────── */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: #f9f9f9;
+  border-right: 1px solid #e8e8e8;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.nav-list {
+  list-style: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.nav-item:hover {
+  color: #555;
+}
+
+.nav-item.active {
+  color: #333;
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.nav-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 6px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.nav-section-header:hover {
+  color: #555;
+}
+
+.nav-preview-link {
+  margin-left: auto;
+  color: #E8651A;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav-preview-link:hover {
+  text-decoration: underline;
+}
+
+.nav-sub-item {
+  padding: 9px 20px 9px 48px;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 2px 10px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-sub-item:hover {
+  color: #555;
+  background: #efefef;
+}
+
+.nav-sub-item.active {
+  background: #fff;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* ── MAIN CONTENT ────────────────────────────────────────────────── */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 36px;
+  background: #fff;
+}
+
+/* ── PAGE ────────────────────────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+.page-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 300;
+  color: #222;
+  letter-spacing: -0.5px;
+}
+
+.page-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.published-timestamp {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────────────── */
+.btn-primary {
+  background: #E8651A;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: #d05a15;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon:hover {
+  background: #f5f5f5;
+}
+
+/* noop = visually present but does nothing */
+.noop { cursor: default; }
+.btn-primary.noop:hover { background: #E8651A; }
+.btn-icon.noop:hover { background: none; }
+
+/* ── TABS ────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 28px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 24px;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #aaa;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s;
+}
+
+.tab.active {
+  color: #333;
+  border-bottom-color: #E8651A;
+}
+
+.tab.noop { cursor: default; }
+
+/* ── TOOLBAR ─────────────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.view-toggle {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.view-btn {
+  background: #fff;
+  border: none;
+  padding: 7px 16px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+  border-right: 1px solid #ddd;
+  transition: background 0.1s;
+}
+
+.view-btn:last-child { border-right: none; }
+
+.view-btn.active {
+  background: #fff;
+  color: #333;
+  font-weight: 600;
+}
+
+.view-btn.noop { cursor: default; }
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 6px 12px;
+  background: #fff;
+  width: 200px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #888;
+  background: transparent;
+  width: 100%;
+}
+
+.search-input::placeholder { color: #bbb; }
+
+/* ── TABLE ───────────────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  border-bottom: 1px solid #eee;
+}
+
+.data-table thead th svg {
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.data-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.data-table tbody td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.col-name  { width: 40%; }
+.col-code  { width: 15%; }
+.col-price { width: 10%; }
+.col-display { width: 20%; }
+.col-stock { width: 15%; }
+
+td.col-code,
+td.col-price { color: #555; }
+
+td.col-display { color: #777; }
+
+/* ── STOCK BADGE ─────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-in-stock {
+  color: #3aab5e;
+  border: 1px solid #3aab5e;
+  background: #f2fbf5;
+}
+
+.badge-out-of-stock {
+  color: #cc3b3b;
+  border: 1px solid #cc3b3b;
+  background: #fff5f5;
+}
+
+/* ── PLACEHOLDER PAGES ───────────────────────────────────────────── */
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  gap: 16px;
+}
+
+.placeholder-text {
+  color: #bbb;
+  font-size: 15px;
+}
+
+/* ── FLYOUT OVERLAY ──────────────────────────────────────────────── */
+.flyout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.flyout-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── EDIT FLYOUT PANEL ───────────────────────────────────────────── */
+.edit-flyout {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 540px;
+  height: 100vh;
+  background: #fff;
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  box-shadow: -4px 0 28px rgba(0,0,0,0.14);
+}
+.edit-flyout.open {
+  transform: translateX(0);
+}
+
+/* Header */
+.flyout-header {
+  background: #3a3a3a;
+  height: 52px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.flyout-title {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.flyout-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+}
+.flyout-close-btn:hover { opacity: 1; }
+
+/* Tab bar */
+.flyout-tab-bar {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  background: #fff;
+  flex-shrink: 0;
+  padding: 0 20px;
+}
+.flyout-tab {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #aaa;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s;
+}
+.flyout-tab.active {
+  color: #333;
+  border-bottom-color: #E8651A;
+}
+
+/* Scrollable body */
+.flyout-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.flyout-tab-content { display: none; }
+.flyout-tab-content.active { display: block; }
+
+/* Fields */
+.flyout-field { margin-bottom: 18px; }
+.flyout-field-row {
+  display: flex;
+  gap: 16px;
+}
+.flyout-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.req { color: #E8651A; }
+.flyout-tooltip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: #bbb;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: default;
+  vertical-align: middle;
+}
+.flyout-input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.flyout-input:focus { border-color: #E8651A; }
+.flyout-textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #333;
+  resize: vertical;
+  min-height: 72px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.flyout-textarea:focus { border-color: #E8651A; }
+.flyout-select {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  outline: none;
+}
+.flyout-input-prefix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.flyout-prefix {
+  padding: 8px 10px;
+  background: #f5f5f5;
+  color: #888;
+  font-size: 13px;
+  border-right: 1px solid #ddd;
+  flex-shrink: 0;
+}
+.flyout-input-no-left {
+  border: none;
+  border-radius: 0;
+  flex: 1;
+}
+.flyout-input-no-left:focus { outline: none; }
+
+/* Image upload */
+.flyout-image-upload {
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.flyout-image-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.flyout-image-placeholder {
+  font-size: 12px;
+  color: #bbb;
+}
+.flyout-upload-btn {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+}
+.flyout-upload-btn:hover { background: #f5f5f5; }
+
+/* Tags input */
+.flyout-tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 6px 10px;
+  min-height: 38px;
+}
+.flyout-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #efefef;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #444;
+}
+.tag-remove {
+  background: none;
+  border: none;
+  font-size: 10px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.tag-remove:hover { color: #E8651A; }
+.flyout-tag-select {
+  border: none;
+  background: none;
+  font-size: 12px;
+  color: #E8651A;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Modifiers table */
+.flyout-mod-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.flyout-mod-table thead th {
+  padding: 6px 4px;
+  text-align: left;
+  color: #999;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+}
+.flyout-mod-table tbody td {
+  padding: 8px 4px;
+  color: #444;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 12px;
+}
+.flyout-mod-num {
+  width: 38px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 3px 4px;
+  font-size: 12px;
+  text-align: center;
+}
+.mod-remove {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 4px;
+}
+.mod-remove:hover { color: #cc3b3b; }
+.mod-drag {
+  color: #ccc;
+  cursor: grab;
+  font-size: 16px;
+  letter-spacing: -3px;
+}
+.flyout-mod-add { margin-top: 8px; }
+
+/* Cost/price */
+.flyout-cost-pct {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+}
+
+/* Checklist */
+.flyout-checklist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.flyout-checklist-row {
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 20px;
+}
+.flyout-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #444;
+  cursor: pointer;
+}
+.flyout-check input[type="checkbox"] {
+  accent-color: #E8651A;
+  width: 14px;
+  height: 14px;
+}
+
+/* Stock tab badge */
+.flyout-stock-select { margin-bottom: 14px; }
+.flyout-stock-badge {
+  display: inline-block;
+  padding: 5px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 2px solid;
+}
+.flyout-stock-badge.badge-in-stock {
+  color: #3aab5e;
+  border-color: #3aab5e;
+  background: #f2fbf5;
+}
+.flyout-stock-badge.badge-out-of-stock {
+  color: #cc3b3b;
+  border-color: #cc3b3b;
+  background: #fff5f5;
+}
+.flyout-stock-badge.badge-limited {
+  color: #c07a00;
+  border-color: #c07a00;
+  background: #fffbf0;
+}
+
+/* Footer */
+.flyout-footer {
+  border-top: 1px solid #eee;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  background: #fff;
+}
+.flyout-btn-filled {
+  background: #E8651A;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.flyout-btn-filled:hover { background: #d05a15; }
+.flyout-btn-text {
+  background: none;
+  border: none;
+  color: #E8651A;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 10px 12px;
+}
+.flyout-btn-text:hover { text-decoration: underline; }
+
+/* Row clickable cursor */
+.data-table tbody tr { cursor: pointer; }
+.data-table tbody tr:hover { background: #fdf5f0; }
+
+</style>
+</head>
+<body>
+
+  <!-- ── HEADER ────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <span class="cake-logo">CAK<span class="cake-logo-e">Ē</span></span>
+    </div>
+    <div class="topbar-location">Cafe Layers (Tampa)</div>
+    <div class="topbar-right">
+      <div class="topbar-bell">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="bell-dot"></span>
+      </div>
+      <div class="topbar-user">
+        <div class="user-avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="user-name">Jake Linder</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── LAYOUT ─────────────────────────────────────────────────── -->
+  <div class="layout">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────── -->
+    <nav class="sidebar">
+      <ul class="nav-list">
+        <li class="nav-item" data-page="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </li>
+        <li class="nav-item" data-page="reports">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Reports
+        </li>
+        <li class="nav-item" data-page="customers">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Customers
+        </li>
+        <li class="nav-item" data-page="staff">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Staff
+        </li>
+        <li class="nav-section-header">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Menu
+          <span class="nav-preview-link" onclick="event.stopPropagation()">Preview</span>
+        </li>
+        <li class="nav-sub-item active" data-page="items">Items</li>
+        <li class="nav-sub-item" data-page="categories">Categories</li>
+        <li class="nav-sub-item" data-page="modifiers">Modifiers</li>
+        <li class="nav-sub-item" data-page="availability">Availability</li>
+      </ul>
+    </nav>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+    <main class="main-content">
+
+      <!-- ITEMS PAGE -->
+      <div id="page-items" class="page active">
+        <div class="page-header-row">
+          <h1 class="page-title">Items</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD ITEM</button>
+          </div>
+        </div>
+
+        <div class="tab-bar">
+          <button class="tab active" data-tab="item-list">ITEM LIST</button>
+          <button class="tab noop" data-tab="featured">FEATURED</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid">Grid View</button>
+            <button class="view-btn" data-view="pos">POS View</button>
+            <button class="view-btn" data-view="catering">Catering View</button>
+          </div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search" class="search-input noop" readonly />
+            </div>
+            <button class="btn-icon noop" title="More options">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-name">
+                Name
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+              </th>
+              <th class="col-code">Item Code</th>
+              <th class="col-price">Price</th>
+              <th class="col-display">Display On</th>
+              <th class="col-stock">Stock</th>
+            </tr>
+          </thead>
+          <tbody id="items-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CATEGORIES PAGE -->
+      <div id="page-categories" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Categories</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD CATEGORY</button>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+          </div>
+          <p class="placeholder-text">Categories will appear here.</p>
+        </div>
+      </div>
+
+      <!-- MODIFIERS PAGE -->
+      <div id="page-modifiers" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Modifiers</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD MODIFIER</button>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2M20 12h2M5.34 5.34l1.41 1.41M18.66 18.66l1.41 1.41"/></svg>
+          </div>
+          <p class="placeholder-text">Modifiers will appear here.</p>
+        </div>
+      </div>
+
+      <!-- AVAILABILITY PAGE -->
+      <div id="page-availability" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Availability</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <p class="placeholder-text">Availability schedules will appear here.</p>
+        </div>
+      </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div id="page-dashboard" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <p class="placeholder-text">Dashboard content will appear here.</p>
+        </div>
+      </div>
+
+      <!-- REPORTS PAGE -->
+      <div id="page-reports" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Reports</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <p class="placeholder-text">Reports will appear here.</p>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS PAGE -->
+      <div id="page-customers" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Customers</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <p class="placeholder-text">Customer data will appear here.</p>
+        </div>
+      </div>
+
+      <!-- STAFF PAGE -->
+      <div id="page-staff" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Staff</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <p class="placeholder-text">Staff management will appear here.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── FLYOUT OVERLAY ──────────────────────────────────────────── -->
+  <div id="flyout-overlay" class="flyout-overlay"></div>
+
+  <!-- ── EDIT ITEM FLYOUT ─────────────────────────────────────────── -->
+  <div id="edit-flyout" class="edit-flyout">
+
+    <!-- Header -->
+    <div class="flyout-header">
+      <span class="flyout-title">Edit Item</span>
+      <button class="flyout-close-btn" id="flyout-close-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="flyout-tab-bar">
+      <button class="flyout-tab active" data-flyout-tab="details">DETAILS</button>
+      <button class="flyout-tab" data-flyout-tab="stock">STOCK</button>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="flyout-body">
+
+      <!-- ── DETAILS TAB ─────────────────────────────────────────── -->
+      <div id="flyout-tab-details" class="flyout-tab-content active">
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="f-item-name" />
+        </div>
+
+        <div class="flyout-field">
+          <textarea class="flyout-textarea" id="f-description" placeholder="Description"></textarea>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATEGORY <span class="req">*</span></label>
+          <select class="flyout-select" id="f-category">
+            <option>Breakfast</option>
+            <option>Beverages</option>
+            <option>Lunch</option>
+            <option>Sides</option>
+            <option>Desserts</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ONLINE ORDERING IMAGE</label>
+          <div class="flyout-image-upload">
+            <div class="flyout-image-thumb">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="flyout-image-placeholder">No image uploaded</span>
+            </div>
+            <button class="flyout-upload-btn">Upload Image</button>
+          </div>
+        </div>
+
+        <div class="flyout-field-row">
+          <div class="flyout-field" style="flex:1">
+            <label class="flyout-label">PRICE <span class="req">*</span></label>
+            <div class="flyout-input-prefix">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-price" step="0.01" />
+            </div>
+          </div>
+          <div class="flyout-field" style="flex:1">
+            <label class="flyout-label">PRICE + TAX <span class="req">*</span></label>
+            <div class="flyout-input-prefix">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-price-tax" step="0.01" readonly style="background:#f9f9f9;color:#888" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">TAX</label>
+          <select class="flyout-select" id="f-tax">
+            <option>Group Tax (16%)</option>
+            <option>No Tax (0%)</option>
+            <option>Sales Tax (8%)</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">STATIONS</label>
+          <div class="flyout-tags-input">
+            <span class="flyout-tag">KITCHEN <button class="tag-remove">✕</button></span>
+            <span class="flyout-tag">LABEL <button class="tag-remove">✕</button></span>
+            <select class="flyout-tag-select">
+              <option value="">+ Add Station</option>
+              <option>BAR</option>
+              <option>EXPO</option>
+              <option>GRILL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">MODIFIERS <span class="flyout-tooltip">?</span></label>
+          <table class="flyout-mod-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Req</th><th>Min</th><th>Max</th>
+                <th>POS</th><th>OLO</th><th>KSK</th><th></th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Eggs Preparation</td><td><input type="checkbox" checked /></td><td><input type="number" class="flyout-mod-num" value="1"/></td><td><input type="number" class="flyout-mod-num" value="1"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>(1) Egg Classic Breakfast Meat Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="3"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Breakfast Bread Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="2"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Spreads</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="4"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Hash Brown Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="2"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+            </tbody>
+          </table>
+          <div class="flyout-mod-add">
+            <select class="flyout-select">
+              <option value="">+ Modifier Group</option>
+              <option>Meat Modifier</option>
+              <option>Salad Additions</option>
+              <option>Drink Size</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">PREP TICKET NAME <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-prep-ticket" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">RECEIPT &amp; ONLINE NAME <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-receipt-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM COST</label>
+          <div class="flyout-field-row" style="align-items:center;gap:12px;margin-bottom:0">
+            <div class="flyout-input-prefix" style="flex:0 0 130px">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-item-cost" step="0.01" placeholder="0.00" />
+            </div>
+            <span class="flyout-cost-pct">COST/PRICE % = 0.00%</span>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">SALES CATEGORY <span class="req">*</span> <span class="flyout-tooltip">?</span></label>
+          <select class="flyout-select" id="f-sales-cat">
+            <option>Food</option>
+            <option>Beverage</option>
+            <option>Merchandise</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM CODE <span class="req">*</span> <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-item-code" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">EXTERNAL ID <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-external-id" placeholder="External ID" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CALORIES <span class="flyout-tooltip">?</span></label>
+          <input type="number" class="flyout-input" id="f-calories" placeholder="0" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ALLERGENS <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-tags-input">
+            <span class="flyout-tag">DAIRY <button class="tag-remove">✕</button></span>
+            <span class="flyout-tag">EGGS <button class="tag-remove">✕</button></span>
+            <select class="flyout-tag-select">
+              <option value="">+ Add Allergen</option>
+              <option>GLUTEN</option>
+              <option>NUTS</option>
+              <option>SOY</option>
+              <option>SHELLFISH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">FOOD LABEL <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-checklist">
+            <label class="flyout-check"><input type="checkbox" /> Eat Well</label>
+            <label class="flyout-check"><input type="checkbox" /> Gluten-Free</label>
+            <label class="flyout-check"><input type="checkbox" /> Halal</label>
+            <label class="flyout-check"><input type="checkbox" /> Keto</label>
+            <label class="flyout-check"><input type="checkbox" /> Locally Sourced</label>
+            <label class="flyout-check"><input type="checkbox" /> No-Wheat</label>
+            <label class="flyout-check"><input type="checkbox" /> Spicy</label>
+            <label class="flyout-check"><input type="checkbox" /> Vegan</label>
+            <label class="flyout-check"><input type="checkbox" /> Vegetarian</label>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">SHOW THIS ITEM ON <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-checklist flyout-checklist-row">
+            <label class="flyout-check"><input type="checkbox" id="f-show-pos" /> POS</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-olo" /> OLO</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-kiosk" /> KIOSK</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-catering" /> CATERING</label>
+          </div>
+        </div>
+
+      </div><!-- /details -->
+
+      <!-- ── STOCK TAB ───────────────────────────────────────────── -->
+      <div id="flyout-tab-stock" class="flyout-tab-content">
+        <div class="flyout-field">
+          <label class="flyout-label">STOCK <span class="req">*</span></label>
+          <select class="flyout-select flyout-stock-select" id="f-stock">
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="limited">Limited</option>
+          </select>
+          <div class="flyout-stock-badge badge-in-stock" id="f-stock-badge">In Stock</div>
+        </div>
+      </div><!-- /stock -->
+
+    </div><!-- /flyout-body -->
+
+    <!-- Footer: Details -->
+    <div class="flyout-footer" id="flyout-footer-details">
+      <button class="flyout-btn-filled">SAVE</button>
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text flyout-cancel-btn">CANCEL</button>
+      <button class="flyout-btn-text flyout-delete-btn">DELETE</button>
+    </div>
+
+    <!-- Footer: Stock -->
+    <div class="flyout-footer" id="flyout-footer-stock" style="display:none">
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text flyout-cancel-btn">CANCEL</button>
+    </div>
+
+  </div><!-- /edit-flyout -->
+
+  <script>
+// ── SAMPLE DATA ──────────────────────────────────────────────────────
+const ITEMS = [
+  { name: '(1) Egg Classic Breakfast (2)',  code: 46,  price: '$5.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(1) French Toast 1',             code: 41,  price: '$2.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(2) Blueberry Pancakes',         code: 39,  price: '$5.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(2) French Toast',               code: 42,  price: '$3.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(2) Jalapenos',                  code: 231, price: '$0.99',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(3) Avocado Toast',              code: 57,  price: '$8.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(3) Bacon & Eggs',               code: 58,  price: '$7.50',  pos: true,  olo: true,  kiosk: false, inStock: false,  catering: false },
+  { name: '(4) Belgian Waffle',             code: 63,  price: '$6.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(4) Breakfast Burrito',          code: 64,  price: '$9.00',  pos: true,  olo: false, kiosk: true,  inStock: true,  catering: false },
+  { name: '(5) Cinnamon Roll',              code: 71,  price: '$4.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(5) Cold Brew Coffee',           code: 72,  price: '$4.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(6) Denver Omelette',            code: 83,  price: '$10.00', pos: true,  olo: true,  kiosk: true,  inStock: false, catering: false },
+  { name: '(6) Fresh Orange Juice',         code: 88,  price: '$3.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(7) Greek Yogurt Parfait',       code: 92,  price: '$5.00',  pos: false, olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(7) Ham & Cheese Omelette',      code: 96,  price: '$8.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let currentView = 'grid';
+let currentItemIndex = -1;
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function getDisplayString(item) {
+  const parts = [];
+  if (item.pos)      parts.push('POS');
+  if (item.olo)      parts.push('OLO');
+  if (item.kiosk)    parts.push('KIOSK');
+  if (item.catering) parts.push('CATERING');
+  return parts.join(', ') || '—';
+}
+
+// ── RENDER ITEMS TABLE ────────────────────────────────────────────────
+function renderItems() {
+  const tbody = document.getElementById('items-tbody');
+
+  const list = currentView === 'catering'
+    ? ITEMS.filter(item => item.catering)
+    : ITEMS;
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center;padding:48px 0;color:#bbb;font-size:14px">
+          No catering items yet. Click any item row and check <strong>Catering</strong> under "Show This Item On".
+        </td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(item => {
+    const realIndex = ITEMS.indexOf(item);
+    return `
+      <tr data-item-index="${realIndex}">
+        <td class="col-name">${item.name}</td>
+        <td class="col-code">${item.code}</td>
+        <td class="col-price">${item.price}</td>
+        <td class="col-display">${getDisplayString(item)}</td>
+        <td class="col-stock">
+          <span class="badge ${item.inStock ? 'badge-in-stock' : 'badge-out-of-stock'}">
+            ${item.inStock ? 'In Stock' : 'Out of Stock'}
+          </span>
+        </td>
+      </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('tr[data-item-index]').forEach(row => {
+    row.addEventListener('click', () => {
+      const idx = parseInt(row.dataset.itemIndex, 10);
+      if (!isNaN(idx)) openFlyout(idx);
+    });
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────
+function navigate(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-sub-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.page === pageId)
+  );
+  document.querySelectorAll('.nav-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.page === pageId)
+  );
+}
+
+// ── BIND SIDEBAR CLICKS ───────────────────────────────────────────────
+document.querySelectorAll('[data-page]').forEach(el => {
+  el.addEventListener('click', () => navigate(el.dataset.page));
+});
+
+// ── VIEW TOGGLE ───────────────────────────────────────────────────────
+document.querySelectorAll('.view-btn[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    renderItems();
+  });
+});
+
+// ── FLYOUT ────────────────────────────────────────────────────────────
+const overlay    = document.getElementById('flyout-overlay');
+const flyout     = document.getElementById('edit-flyout');
+const stockSel   = document.getElementById('f-stock');
+const stockBadge = document.getElementById('f-stock-badge');
+
+function openFlyout(index) {
+  currentItemIndex = index;
+  const item = ITEMS[index];
+
+  document.getElementById('f-item-name').value    = item.name;
+  document.getElementById('f-item-code').value    = item.code;
+  document.getElementById('f-prep-ticket').value  = item.name;
+  document.getElementById('f-receipt-name').value = item.name;
+
+  const rawPrice = parseFloat(item.price.replace('$', ''));
+  document.getElementById('f-price').value     = rawPrice.toFixed(2);
+  document.getElementById('f-price-tax').value = (rawPrice * 1.16).toFixed(2);
+
+  document.getElementById('f-show-pos').checked      = item.pos;
+  document.getElementById('f-show-olo').checked      = item.olo;
+  document.getElementById('f-show-kiosk').checked    = item.kiosk;
+  document.getElementById('f-show-catering').checked = item.catering;
+
+  const stockVal = item.inStock ? 'in' : 'out';
+  stockSel.value = stockVal;
+  updateStockBadge(stockVal);
+
+  switchFlyoutTab('details');
+  overlay.classList.add('open');
+  flyout.classList.add('open');
+}
+
+function closeFlyout() {
+  overlay.classList.remove('open');
+  flyout.classList.remove('open');
+  currentItemIndex = -1;
+}
+
+function switchFlyoutTab(tabId) {
+  document.querySelectorAll('.flyout-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.flyoutTab === tabId)
+  );
+  document.querySelectorAll('.flyout-tab-content').forEach(c =>
+    c.classList.toggle('active', c.id === 'flyout-tab-' + tabId)
+  );
+  document.getElementById('flyout-footer-details').style.display = tabId === 'details' ? '' : 'none';
+  document.getElementById('flyout-footer-stock').style.display   = tabId === 'stock'   ? '' : 'none';
+}
+
+function updateStockBadge(val) {
+  const labels  = { in: 'In Stock', out: 'Out of Stock', limited: 'Limited' };
+  const classes = { in: 'badge-in-stock', out: 'badge-out-of-stock', limited: 'badge-limited' };
+  stockBadge.textContent = labels[val] || 'In Stock';
+  stockBadge.className   = 'flyout-stock-badge ' + (classes[val] || 'badge-in-stock');
+}
+
+// Live-update Display On when "Show This Item On" checkboxes change
+['f-show-pos', 'f-show-olo', 'f-show-kiosk', 'f-show-catering'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    if (currentItemIndex < 0) return;
+    const item = ITEMS[currentItemIndex];
+    item.pos      = document.getElementById('f-show-pos').checked;
+    item.olo      = document.getElementById('f-show-olo').checked;
+    item.kiosk    = document.getElementById('f-show-kiosk').checked;
+    item.catering = document.getElementById('f-show-catering').checked;
+    renderItems();
+  });
+});
+
+// Flyout tab switching
+document.querySelectorAll('.flyout-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchFlyoutTab(tab.dataset.flyoutTab));
+});
+
+// Close handlers
+overlay.addEventListener('click', closeFlyout);
+document.getElementById('flyout-close-btn').addEventListener('click', closeFlyout);
+document.querySelectorAll('.flyout-cancel-btn').forEach(btn =>
+  btn.addEventListener('click', closeFlyout)
+);
+
+// Stock badge live update
+stockSel.addEventListener('change', () => updateStockBadge(stockSel.value));
+
+// ── INIT ──────────────────────────────────────────────────────────────
+renderItems();
+navigate('items');
+
+</script>
+</body>
+</html>
