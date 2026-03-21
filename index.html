@@ -464,6 +464,143 @@
 
   </div><!-- /edit-flyout -->
 
+  <!-- ── CATERING EDIT FLYOUT ──────────────────────────────────────── -->
+  <div id="catering-flyout" class="edit-flyout">
+
+    <div class="flyout-header">
+      <span class="flyout-title">Edit Catering Item</span>
+      <button class="flyout-close-btn" id="catering-flyout-close-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="flyout-tab-bar">
+      <button class="catering-tab active" data-catering-tab="details">DETAILS</button>
+      <button class="catering-tab" data-catering-tab="stock">STOCK</button>
+    </div>
+
+    <div class="flyout-body">
+
+      <!-- DETAILS TAB -->
+      <div id="catering-tab-details" class="flyout-tab-content active">
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="cf-item-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATERING NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="cf-catering-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">PRICE <span class="req">*</span></label>
+          <div class="flyout-input-prefix">
+            <span class="flyout-prefix">$</span>
+            <input type="number" class="flyout-input flyout-input-no-left" id="cf-price" step="0.01" />
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATERING TAX CATEGORY</label>
+          <select class="flyout-select" id="cf-tax-category">
+            <option value="">— Select —</option>
+            <option>BAKERY_ITEMS</option>
+            <option>CAKES_AND_PIES</option>
+            <option>CANDY</option>
+            <option>CHIPS_AND_SNACKS</option>
+            <option>COFFEE_TEA_MILK</option>
+            <option>DRESSINGS_AND_CONDIMENTS</option>
+            <option>EXEMPT</option>
+            <option>ICE_CREAM</option>
+            <option>MISCELLANEOUS</option>
+            <option>NON_SODA_DRINKS</option>
+            <option>PREPARED_FOOD</option>
+            <option>SANDWICHES</option>
+            <option>SODA</option>
+            <option>WATER</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">QUANTITY UNIT</label>
+          <select class="flyout-select" id="cf-quantity-unit">
+            <option value="">— Select —</option>
+            <option>BAR</option>
+            <option>BOTTLE</option>
+            <option>BOWL</option>
+            <option>BOX</option>
+            <option>BUFFET</option>
+            <option>CAKE</option>
+            <option>CAN</option>
+            <option>CARAFE</option>
+            <option>DOZEN</option>
+            <option>FOOT</option>
+            <option>FULL_PAN</option>
+            <option>GALLON</option>
+            <option>HALF_GALLON</option>
+            <option>HALF_PAN</option>
+            <option>ITEM</option>
+            <option>KIT</option>
+            <option>LITER</option>
+            <option>PACKAGE</option>
+            <option>PAN</option>
+            <option>PERSON</option>
+            <option>PIE</option>
+            <option>PIECE</option>
+            <option>PINT</option>
+            <option>PIZZA</option>
+            <option>PLATTER</option>
+            <option>POUND</option>
+            <option>QUART</option>
+            <option>ROLL</option>
+            <option>SIX_PACK</option>
+            <option>SKEWER</option>
+            <option>SLIDER</option>
+            <option>TACO</option>
+            <option>TRAY</option>
+            <option>TWELVE_PACK</option>
+            <option>TWO_LITER</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-check" style="font-size:13px;font-weight:500">
+            <input type="checkbox" id="cf-utensils" style="accent-color:#E8651A;width:14px;height:14px" />
+            Utensils
+          </label>
+        </div>
+
+      </div><!-- /details -->
+
+      <!-- STOCK TAB -->
+      <div id="catering-tab-stock" class="flyout-tab-content">
+        <div class="flyout-field">
+          <label class="flyout-label">STOCK <span class="req">*</span></label>
+          <select class="flyout-select flyout-stock-select" id="cf-stock">
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="limited">Limited</option>
+          </select>
+          <div class="flyout-stock-badge badge-in-stock" id="cf-stock-badge">In Stock</div>
+        </div>
+      </div><!-- /stock -->
+
+    </div><!-- /flyout-body -->
+
+    <div class="flyout-footer" id="catering-footer-details">
+      <button class="flyout-btn-filled">SAVE</button>
+      <button class="flyout-btn-text catering-cancel-btn">CANCEL</button>
+    </div>
+
+    <div class="flyout-footer" id="catering-footer-stock" style="display:none">
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text catering-cancel-btn">CANCEL</button>
+    </div>
+
+  </div><!-- /catering-flyout -->
+
   <script src="app.js"></script>
 </body>
 </html>

@@ -1,20 +1,20 @@
 // ── SAMPLE DATA ──────────────────────────────────────────────────────
 const ITEMS = [
-  { name: '(1) Egg Classic Breakfast (2)',  code: 46,  price: '$5.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(1) French Toast 1',             code: 41,  price: '$2.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(2) Blueberry Pancakes',         code: 39,  price: '$5.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(2) French Toast',               code: 42,  price: '$3.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(2) Jalapenos',                  code: 231, price: '$0.99',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(3) Avocado Toast',              code: 57,  price: '$8.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(3) Bacon & Eggs',               code: 58,  price: '$7.50',  pos: true,  olo: true,  kiosk: false, inStock: false,  catering: false },
-  { name: '(4) Belgian Waffle',             code: 63,  price: '$6.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(4) Breakfast Burrito',          code: 64,  price: '$9.00',  pos: true,  olo: false, kiosk: true,  inStock: true,  catering: false },
-  { name: '(5) Cinnamon Roll',              code: 71,  price: '$4.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(5) Cold Brew Coffee',           code: 72,  price: '$4.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(6) Denver Omelette',            code: 83,  price: '$10.00', pos: true,  olo: true,  kiosk: true,  inStock: false, catering: false },
-  { name: '(6) Fresh Orange Juice',         code: 88,  price: '$3.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(7) Greek Yogurt Parfait',       code: 92,  price: '$5.00',  pos: false, olo: true,  kiosk: true,  inStock: true,  catering: false },
-  { name: '(7) Ham & Cheese Omelette',      code: 96,  price: '$8.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false },
+  { name: '(1) Egg Classic Breakfast (2)',  code: 46,  price: '$5.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(1) French Toast 1',             code: 41,  price: '$2.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(2) Blueberry Pancakes',         code: 39,  price: '$5.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(2) French Toast',               code: 42,  price: '$3.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(2) Jalapenos',                  code: 231, price: '$0.99',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(3) Avocado Toast',              code: 57,  price: '$8.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(3) Bacon & Eggs',               code: 58,  price: '$7.50',  pos: true,  olo: true,  kiosk: false, inStock: false,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(4) Belgian Waffle',             code: 63,  price: '$6.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(4) Breakfast Burrito',          code: 64,  price: '$9.00',  pos: true,  olo: false, kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(5) Cinnamon Roll',              code: 71,  price: '$4.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(5) Cold Brew Coffee',           code: 72,  price: '$4.00',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(6) Denver Omelette',            code: 83,  price: '$10.00', pos: true,  olo: true,  kiosk: true,  inStock: false, catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(6) Fresh Orange Juice',         code: 88,  price: '$3.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(7) Greek Yogurt Parfait',       code: 92,  price: '$5.00',  pos: false, olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
+  { name: '(7) Ham & Cheese Omelette',      code: 96,  price: '$8.50',  pos: true,  olo: true,  kiosk: true,  inStock: true,  catering: false, cateringName: '', cateringTaxCategory: '', quantityUnit: '', utensils: false },
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────
@@ -68,7 +68,9 @@ function renderItems() {
   tbody.querySelectorAll('tr[data-item-index]').forEach(row => {
     row.addEventListener('click', () => {
       const idx = parseInt(row.dataset.itemIndex, 10);
-      if (!isNaN(idx)) openFlyout(idx);
+      if (isNaN(idx)) return;
+      if (currentView === 'catering') openCateringFlyout(idx);
+      else openFlyout(idx);
     });
   });
 }
@@ -185,6 +187,66 @@ document.querySelectorAll('.flyout-cancel-btn').forEach(btn =>
 
 // Stock badge live update
 stockSel.addEventListener('change', () => updateStockBadge(stockSel.value));
+
+// ── CATERING FLYOUT ───────────────────────────────────────────────────
+const cateringFlyout   = document.getElementById('catering-flyout');
+const cfStockSel       = document.getElementById('cf-stock');
+const cfStockBadge     = document.getElementById('cf-stock-badge');
+
+function openCateringFlyout(index) {
+  currentItemIndex = index;
+  const item = ITEMS[index];
+
+  document.getElementById('cf-item-name').value     = item.name;
+  document.getElementById('cf-catering-name').value = item.cateringName;
+  document.getElementById('cf-price').value         = parseFloat(item.price.replace('$', '')).toFixed(2);
+  document.getElementById('cf-tax-category').value  = item.cateringTaxCategory;
+  document.getElementById('cf-quantity-unit').value = item.quantityUnit;
+  document.getElementById('cf-utensils').checked    = item.utensils;
+
+  const stockVal = item.inStock ? 'in' : 'out';
+  cfStockSel.value = stockVal;
+  updateCateringStockBadge(stockVal);
+
+  switchCateringTab('details');
+  overlay.classList.add('open');
+  cateringFlyout.classList.add('open');
+}
+
+function closeCateringFlyout() {
+  overlay.classList.remove('open');
+  cateringFlyout.classList.remove('open');
+  currentItemIndex = -1;
+}
+
+function switchCateringTab(tabId) {
+  document.querySelectorAll('.catering-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.cateringTab === tabId)
+  );
+  document.querySelectorAll('#catering-flyout .flyout-tab-content').forEach(c =>
+    c.classList.toggle('active', c.id === 'catering-tab-' + tabId)
+  );
+  document.getElementById('catering-footer-details').style.display = tabId === 'details' ? '' : 'none';
+  document.getElementById('catering-footer-stock').style.display   = tabId === 'stock'   ? '' : 'none';
+}
+
+function updateCateringStockBadge(val) {
+  const labels  = { in: 'In Stock', out: 'Out of Stock', limited: 'Limited' };
+  const classes = { in: 'badge-in-stock', out: 'badge-out-of-stock', limited: 'badge-limited' };
+  cfStockBadge.textContent = labels[val] || 'In Stock';
+  cfStockBadge.className   = 'flyout-stock-badge ' + (classes[val] || 'badge-in-stock');
+}
+
+document.querySelectorAll('.catering-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchCateringTab(tab.dataset.cateringTab));
+});
+
+document.getElementById('catering-flyout-close-btn').addEventListener('click', closeCateringFlyout);
+document.querySelectorAll('.catering-cancel-btn').forEach(btn =>
+  btn.addEventListener('click', closeCateringFlyout)
+);
+
+cfStockSel.addEventListener('change', () => updateCateringStockBadge(cfStockSel.value));
 
 // ── INIT ──────────────────────────────────────────────────────────────
 renderItems();
