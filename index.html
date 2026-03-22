@@ -431,6 +431,88 @@
           </div>
         </div>
 
+        <!-- Catering-only fields — shown when CATERING is checked -->
+        <div id="catering-fields-section" class="catering-fields-section" style="display:none">
+          <div class="catering-fields-divider">
+            <span>CATERING SETTINGS</span>
+          </div>
+
+          <div class="flyout-field">
+            <label class="flyout-label">CATERING NAME</label>
+            <input type="text" class="flyout-input" id="f-catering-name" placeholder="Display name for catering orders" />
+          </div>
+
+          <div class="flyout-field">
+            <label class="flyout-label">CATERING TAX CATEGORY</label>
+            <select class="flyout-select" id="f-catering-tax-category">
+              <option value="">— Select —</option>
+              <option>BAKERY_ITEMS</option>
+              <option>CAKES_AND_PIES</option>
+              <option>CANDY</option>
+              <option>CHIPS_AND_SNACKS</option>
+              <option>COFFEE_TEA_MILK</option>
+              <option>DRESSINGS_AND_CONDIMENTS</option>
+              <option>EXEMPT</option>
+              <option>ICE_CREAM</option>
+              <option>MISCELLANEOUS</option>
+              <option>NON_SODA_DRINKS</option>
+              <option>PREPARED_FOOD</option>
+              <option>SANDWICHES</option>
+              <option>SODA</option>
+              <option>WATER</option>
+            </select>
+          </div>
+
+          <div class="flyout-field">
+            <label class="flyout-label">QUANTITY UNIT</label>
+            <select class="flyout-select" id="f-catering-quantity-unit">
+              <option value="">— Select —</option>
+              <option>BAR</option>
+              <option>BOTTLE</option>
+              <option>BOWL</option>
+              <option>BOX</option>
+              <option>BUFFET</option>
+              <option>CAKE</option>
+              <option>CAN</option>
+              <option>CARAFE</option>
+              <option>DOZEN</option>
+              <option>FOOT</option>
+              <option>FULL_PAN</option>
+              <option>GALLON</option>
+              <option>HALF_GALLON</option>
+              <option>HALF_PAN</option>
+              <option>ITEM</option>
+              <option>KIT</option>
+              <option>LITER</option>
+              <option>PACKAGE</option>
+              <option>PAN</option>
+              <option>PERSON</option>
+              <option>PIE</option>
+              <option>PIECE</option>
+              <option>PINT</option>
+              <option>PIZZA</option>
+              <option>PLATTER</option>
+              <option>POUND</option>
+              <option>QUART</option>
+              <option>ROLL</option>
+              <option>SIX_PACK</option>
+              <option>SKEWER</option>
+              <option>SLIDER</option>
+              <option>TACO</option>
+              <option>TRAY</option>
+              <option>TWELVE_PACK</option>
+              <option>TWO_LITER</option>
+            </select>
+          </div>
+
+          <div class="flyout-field">
+            <label class="flyout-check" style="font-size:13px;font-weight:500">
+              <input type="checkbox" id="f-catering-utensils" style="accent-color:#E8651A;width:14px;height:14px" />
+              Utensils
+            </label>
+          </div>
+        </div>
+
       </div><!-- /details -->
 
       <!-- ── STOCK TAB ───────────────────────────────────────────── -->
@@ -464,8 +546,7 @@
 
   </div><!-- /edit-flyout -->
 
-  <!-- ── CATERING EDIT FLYOUT ──────────────────────────────────────── -->
-  <div id="catering-flyout" class="edit-flyout">
+  <div id="catering-flyout" class="edit-flyout" style="display:none!important">
 
     <div class="flyout-header">
       <span class="flyout-title">Edit Catering Item</span>

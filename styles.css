@@ -846,21 +846,23 @@ td.col-display { color: #777; }
 .data-table tbody tr { cursor: pointer; }
 .data-table tbody tr:hover { background: #fdf5f0; }
 
-/* Catering flyout tab bar — mirrors .flyout-tab but uses .catering-tab */
-.catering-tab {
-  background: none;
-  border: none;
-  padding: 12px 16px;
-  font-size: 12px;
+/* Catering inline fields section */
+.catering-fields-section {
+  margin-top: 4px;
+  border-top: 2px solid #E8651A;
+  padding-top: 4px;
+}
+.catering-fields-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 0 4px;
+}
+.catering-fields-divider span {
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
-  color: #aaa;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color 0.15s;
-}
-.catering-tab.active {
-  color: #333;
-  border-bottom-color: #E8651A;
+  color: #E8651A;
+  white-space: nowrap;
 }

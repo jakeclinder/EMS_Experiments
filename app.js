@@ -69,8 +69,7 @@ function renderItems() {
     row.addEventListener('click', () => {
       const idx = parseInt(row.dataset.itemIndex, 10);
       if (isNaN(idx)) return;
-      if (currentView === 'catering') openCateringFlyout(idx);
-      else openFlyout(idx);
+      openFlyout(idx);
     });
   });
 }
@@ -127,6 +126,12 @@ function openFlyout(index) {
   document.getElementById('f-show-kiosk').checked    = item.kiosk;
   document.getElementById('f-show-catering').checked = item.catering;
 
+  document.getElementById('f-catering-name').value          = item.cateringName || '';
+  document.getElementById('f-catering-tax-category').value  = item.cateringTaxCategory || '';
+  document.getElementById('f-catering-quantity-unit').value = item.quantityUnit || '';
+  document.getElementById('f-catering-utensils').checked    = item.utensils || false;
+  document.getElementById('catering-fields-section').style.display = item.catering ? '' : 'none';
+
   const stockVal = item.inStock ? 'in' : 'out';
   stockSel.value = stockVal;
   updateStockBadge(stockVal);
@@ -169,7 +174,20 @@ function updateStockBadge(val) {
     item.olo      = document.getElementById('f-show-olo').checked;
     item.kiosk    = document.getElementById('f-show-kiosk').checked;
     item.catering = document.getElementById('f-show-catering').checked;
+    document.getElementById('catering-fields-section').style.display = item.catering ? '' : 'none';
     renderItems();
+  });
+});
+
+// Live-update catering fields
+['f-catering-name', 'f-catering-tax-category', 'f-catering-quantity-unit', 'f-catering-utensils'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    if (currentItemIndex < 0) return;
+    const item = ITEMS[currentItemIndex];
+    item.cateringName        = document.getElementById('f-catering-name').value;
+    item.cateringTaxCategory = document.getElementById('f-catering-tax-category').value;
+    item.quantityUnit        = document.getElementById('f-catering-quantity-unit').value;
+    item.utensils            = document.getElementById('f-catering-utensils').checked;
   });
 });
 
@@ -187,66 +205,6 @@ document.querySelectorAll('.flyout-cancel-btn').forEach(btn =>
 
 // Stock badge live update
 stockSel.addEventListener('change', () => updateStockBadge(stockSel.value));
-
-// ── CATERING FLYOUT ───────────────────────────────────────────────────
-const cateringFlyout   = document.getElementById('catering-flyout');
-const cfStockSel       = document.getElementById('cf-stock');
-const cfStockBadge     = document.getElementById('cf-stock-badge');
-
-function openCateringFlyout(index) {
-  currentItemIndex = index;
-  const item = ITEMS[index];
-
-  document.getElementById('cf-item-name').value     = item.name;
-  document.getElementById('cf-catering-name').value = item.cateringName;
-  document.getElementById('cf-price').value         = parseFloat(item.price.replace('$', '')).toFixed(2);
-  document.getElementById('cf-tax-category').value  = item.cateringTaxCategory;
-  document.getElementById('cf-quantity-unit').value = item.quantityUnit;
-  document.getElementById('cf-utensils').checked    = item.utensils;
-
-  const stockVal = item.inStock ? 'in' : 'out';
-  cfStockSel.value = stockVal;
-  updateCateringStockBadge(stockVal);
-
-  switchCateringTab('details');
-  overlay.classList.add('open');
-  cateringFlyout.classList.add('open');
-}
-
-function closeCateringFlyout() {
-  overlay.classList.remove('open');
-  cateringFlyout.classList.remove('open');
-  currentItemIndex = -1;
-}
-
-function switchCateringTab(tabId) {
-  document.querySelectorAll('.catering-tab').forEach(t =>
-    t.classList.toggle('active', t.dataset.cateringTab === tabId)
-  );
-  document.querySelectorAll('#catering-flyout .flyout-tab-content').forEach(c =>
-    c.classList.toggle('active', c.id === 'catering-tab-' + tabId)
-  );
-  document.getElementById('catering-footer-details').style.display = tabId === 'details' ? '' : 'none';
-  document.getElementById('catering-footer-stock').style.display   = tabId === 'stock'   ? '' : 'none';
-}
-
-function updateCateringStockBadge(val) {
-  const labels  = { in: 'In Stock', out: 'Out of Stock', limited: 'Limited' };
-  const classes = { in: 'badge-in-stock', out: 'badge-out-of-stock', limited: 'badge-limited' };
-  cfStockBadge.textContent = labels[val] || 'In Stock';
-  cfStockBadge.className   = 'flyout-stock-badge ' + (classes[val] || 'badge-in-stock');
-}
-
-document.querySelectorAll('.catering-tab').forEach(tab => {
-  tab.addEventListener('click', () => switchCateringTab(tab.dataset.cateringTab));
-});
-
-document.getElementById('catering-flyout-close-btn').addEventListener('click', closeCateringFlyout);
-document.querySelectorAll('.catering-cancel-btn').forEach(btn =>
-  btn.addEventListener('click', closeCateringFlyout)
-);
-
-cfStockSel.addEventListener('change', () => updateCateringStockBadge(cfStockSel.value));
 
 // ── INIT ──────────────────────────────────────────────────────────────
 renderItems();
