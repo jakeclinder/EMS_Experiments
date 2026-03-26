@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAKE — Enterprise Menu System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .flyout-help-text {
+      font-size: 11px;
+      color: #999;
+      margin: 3px 0 0 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <span class="cake-logo">CAK<span class="cake-logo-e">Ē</span></span>
+    </div>
+    <div class="topbar-location">Cafe Layers (Tampa)</div>
+    <div class="topbar-right">
+      <div class="topbar-bell">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="bell-dot"></span>
+      </div>
+      <div class="topbar-user">
+        <div class="user-avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="user-name">Jake Linder</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── LAYOUT ─────────────────────────────────────────────────── -->
+  <div class="layout">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────── -->
+    <nav class="sidebar">
+      <ul class="nav-list">
+        <li class="nav-item" data-page="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </li>
+        <li class="nav-item" data-page="reports">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Reports
+        </li>
+        <li class="nav-item" data-page="customers">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Customers
+        </li>
+        <li class="nav-item" data-page="staff">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Staff
+        </li>
+        <li class="nav-section-header">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Menu
+          <span class="nav-preview-link" onclick="event.stopPropagation()">Preview</span>
+        </li>
+        <li class="nav-sub-item active" data-page="items">Items</li>
+        <li class="nav-sub-item" data-page="categories">Categories</li>
+        <li class="nav-sub-item" data-page="modifiers">Modifiers</li>
+        <li class="nav-sub-item" data-page="availability">Availability</li>
+      </ul>
+    </nav>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+    <main class="main-content">
+
+      <!-- ITEMS PAGE -->
+      <div id="page-items" class="page active">
+        <div class="page-header-row">
+          <h1 class="page-title">Items</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD ITEM</button>
+          </div>
+        </div>
+
+        <div class="tab-bar">
+          <button class="tab active" data-tab="item-list">ITEM LIST</button>
+          <button class="tab noop" data-tab="featured">FEATURED</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid">Grid View</button>
+            <button class="view-btn" data-view="pos">POS View</button>
+            <button class="view-btn" data-view="catering">Catering View</button>
+          </div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search" class="search-input noop" readonly />
+            </div>
+            <button class="btn-icon noop" title="More options">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-name">
+                Name
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+              </th>
+              <th class="col-code">Item Code</th>
+              <th class="col-price">Price</th>
+              <th class="col-display">Display On</th>
+              <th class="col-stock">Stock</th>
+            </tr>
+          </thead>
+          <tbody id="items-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CATEGORIES PAGE -->
+      <div id="page-categories" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Categories</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD CATEGORY</button>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+          </div>
+          <p class="placeholder-text">Categories will appear here.</p>
+        </div>
+      </div>
+
+      <!-- MODIFIERS PAGE -->
+      <div id="page-modifiers" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Modifiers</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+            <button class="btn-primary noop">ADD MODIFIER</button>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2M20 12h2M5.34 5.34l1.41 1.41M18.66 18.66l1.41 1.41"/></svg>
+          </div>
+          <p class="placeholder-text">Modifiers will appear here.</p>
+        </div>
+      </div>
+
+      <!-- AVAILABILITY PAGE -->
+      <div id="page-availability" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Availability</h1>
+          <div class="page-header-right">
+            <span class="published-timestamp">Menu published at 3/16/2026, 8:53:19 AM</span>
+          </div>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <p class="placeholder-text">Availability schedules will appear here.</p>
+        </div>
+      </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div id="page-dashboard" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <p class="placeholder-text">Dashboard content will appear here.</p>
+        </div>
+      </div>
+
+      <!-- REPORTS PAGE -->
+      <div id="page-reports" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Reports</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <p class="placeholder-text">Reports will appear here.</p>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS PAGE -->
+      <div id="page-customers" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Customers</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <p class="placeholder-text">Customer data will appear here.</p>
+        </div>
+      </div>
+
+      <!-- STAFF PAGE -->
+      <div id="page-staff" class="page">
+        <div class="page-header-row">
+          <h1 class="page-title">Staff</h1>
+        </div>
+        <div class="placeholder-content">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <p class="placeholder-text">Staff management will appear here.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── FLYOUT OVERLAY ──────────────────────────────────────────── -->
+  <div id="flyout-overlay" class="flyout-overlay"></div>
+
+  <!-- ── EDIT ITEM FLYOUT ─────────────────────────────────────────── -->
+  <div id="edit-flyout" class="edit-flyout">
+
+    <!-- Header -->
+    <div class="flyout-header">
+      <span class="flyout-title">Edit Item</span>
+      <button class="flyout-close-btn" id="flyout-close-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="flyout-tab-bar">
+      <button class="flyout-tab active" data-flyout-tab="details">DETAILS</button>
+      <button class="flyout-tab" data-flyout-tab="stock">STOCK</button>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="flyout-body">
+
+      <!-- ── DETAILS TAB ─────────────────────────────────────────── -->
+      <div id="flyout-tab-details" class="flyout-tab-content active">
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="f-item-name" />
+        </div>
+
+        <div class="flyout-field">
+          <textarea class="flyout-textarea" id="f-description" placeholder="Description"></textarea>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATEGORY <span class="req">*</span></label>
+          <select class="flyout-select" id="f-category">
+            <option>Breakfast</option>
+            <option>Beverages</option>
+            <option>Lunch</option>
+            <option>Sides</option>
+            <option>Desserts</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ONLINE ORDERING IMAGE</label>
+          <div class="flyout-image-upload">
+            <div class="flyout-image-thumb">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span class="flyout-image-placeholder">No image uploaded</span>
+            </div>
+            <button class="flyout-upload-btn">Upload Image</button>
+          </div>
+        </div>
+
+        <div class="flyout-field-row">
+          <div class="flyout-field" style="flex:1">
+            <label class="flyout-label">PRICE <span class="req">*</span></label>
+            <div class="flyout-input-prefix">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-price" step="0.01" />
+            </div>
+          </div>
+          <div class="flyout-field" style="flex:1">
+            <label class="flyout-label">PRICE + TAX <span class="req">*</span></label>
+            <div class="flyout-input-prefix">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-price-tax" step="0.01" readonly style="background:#f9f9f9;color:#888" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">TAX</label>
+          <select class="flyout-select" id="f-tax">
+            <option>Group Tax (16%)</option>
+            <option>No Tax (0%)</option>
+            <option>Sales Tax (8%)</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">STATIONS</label>
+          <div class="flyout-tags-input">
+            <span class="flyout-tag">KITCHEN <button class="tag-remove">✕</button></span>
+            <span class="flyout-tag">LABEL <button class="tag-remove">✕</button></span>
+            <select class="flyout-tag-select">
+              <option value="">+ Add Station</option>
+              <option>BAR</option>
+              <option>EXPO</option>
+              <option>GRILL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">MODIFIERS <span class="flyout-tooltip">?</span></label>
+          <table class="flyout-mod-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Req</th><th>Min</th><th>Max</th>
+                <th>POS</th><th>OLO</th><th>KSK</th><th></th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Eggs Preparation</td><td><input type="checkbox" checked /></td><td><input type="number" class="flyout-mod-num" value="1"/></td><td><input type="number" class="flyout-mod-num" value="1"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>(1) Egg Classic Breakfast Meat Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="3"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Breakfast Bread Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="2"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Spreads</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="4"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+              <tr><td>Hash Brown Options</td><td><input type="checkbox" /></td><td><input type="number" class="flyout-mod-num" value="0"/></td><td><input type="number" class="flyout-mod-num" value="2"/></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" checked /></td><td><button class="mod-remove">✕</button></td><td class="mod-drag">≡</td></tr>
+            </tbody>
+          </table>
+          <div class="flyout-mod-add">
+            <select class="flyout-select">
+              <option value="">+ Modifier Group</option>
+              <option>Meat Modifier</option>
+              <option>Salad Additions</option>
+              <option>Drink Size</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">PREP TICKET NAME <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-prep-ticket" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">RECEIPT &amp; ONLINE NAME <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-receipt-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM COST</label>
+          <div class="flyout-field-row" style="align-items:center;gap:12px;margin-bottom:0">
+            <div class="flyout-input-prefix" style="flex:0 0 130px">
+              <span class="flyout-prefix">$</span>
+              <input type="number" class="flyout-input flyout-input-no-left" id="f-item-cost" step="0.01" placeholder="0.00" />
+            </div>
+            <span class="flyout-cost-pct">COST/PRICE % = 0.00%</span>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">SALES CATEGORY <span class="req">*</span> <span class="flyout-tooltip">?</span></label>
+          <select class="flyout-select" id="f-sales-cat">
+            <option>Food</option>
+            <option>Beverage</option>
+            <option>Merchandise</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM CODE <span class="req">*</span> <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-item-code" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">EXTERNAL ID <span class="flyout-tooltip">?</span></label>
+          <input type="text" class="flyout-input" id="f-external-id" placeholder="External ID" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CALORIES <span class="flyout-tooltip">?</span></label>
+          <input type="number" class="flyout-input" id="f-calories" placeholder="0" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">ALLERGENS <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-tags-input">
+            <span class="flyout-tag">DAIRY <button class="tag-remove">✕</button></span>
+            <span class="flyout-tag">EGGS <button class="tag-remove">✕</button></span>
+            <select class="flyout-tag-select">
+              <option value="">+ Add Allergen</option>
+              <option>GLUTEN</option>
+              <option>NUTS</option>
+              <option>SOY</option>
+              <option>SHELLFISH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">FOOD LABEL <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-checklist">
+            <label class="flyout-check"><input type="checkbox" /> Eat Well</label>
+            <label class="flyout-check"><input type="checkbox" /> Gluten-Free</label>
+            <label class="flyout-check"><input type="checkbox" /> Halal</label>
+            <label class="flyout-check"><input type="checkbox" /> Keto</label>
+            <label class="flyout-check"><input type="checkbox" /> Locally Sourced</label>
+            <label class="flyout-check"><input type="checkbox" /> No-Wheat</label>
+            <label class="flyout-check"><input type="checkbox" /> Spicy</label>
+            <label class="flyout-check"><input type="checkbox" /> Vegan</label>
+            <label class="flyout-check"><input type="checkbox" /> Vegetarian</label>
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">SHOW THIS ITEM ON <span class="flyout-tooltip">?</span></label>
+          <div class="flyout-checklist flyout-checklist-row">
+            <label class="flyout-check"><input type="checkbox" id="f-show-pos" /> POS</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-olo" /> OLO</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-kiosk" /> KIOSK</label>
+            <label class="flyout-check"><input type="checkbox" id="f-show-catering" /> CATERING</label>
+          </div>
+        </div>
+
+        <!-- Catering-only fields — shown when CATERING is checked -->
+        <div id="catering-fields-section" class="catering-fields-section" style="display:none">
+          <div class="catering-fields-divider">
+            <span>CATERING PROPERTIES (ezCater)</span>
+          </div>
+          <p style="font-size:11px;color:#888;margin:0 0 12px 0;padding:0 2px;line-height:1.4">These fields are sent to ezCater when this item is published to the catering marketplace.</p>
+
+          <!-- Phase 1: Catering Name -->
+          <div class="flyout-field">
+            <label class="flyout-label">CATERING NAME</label>
+            <input type="text" class="flyout-input" id="f-catering-name" placeholder="Display name for catering orders" />
+          </div>
+
+          <!-- Phase 1: Tax Category -->
+          <div class="flyout-field">
+            <label class="flyout-label">TAX CATEGORY</label>
+            <select class="flyout-select" id="f-catering-tax-category">
+              <option value="">— Select —</option>
+              <option>PREPARED_FOOD</option>
+              <option>SANDWICHES</option>
+              <option>NON_SODA_DRINKS</option>
+              <option>COFFEE_TEA_MILK</option>
+              <option>WATER</option>
+              <option>BAKERY_ITEMS</option>
+              <option>CANDY</option>
+              <option>SODA</option>
+            </select>
+            <p class="flyout-help-text">Classification for tax purposes. Actual tax rates are configured in the ezCater portal.</p>
+          </div>
+
+          <!-- Phase 1: Serves -->
+          <div class="flyout-field">
+            <label class="flyout-label">SERVES (NUMBER OF PEOPLE)</label>
+            <input type="number" class="flyout-input" id="f-catering-serves" min="1" step="1" placeholder="e.g. 10" style="width:120px" />
+            <p class="flyout-help-text">Indicates how many people this item feeds. Helps guests understand portion size when ordering.</p>
+          </div>
+
+          <!-- Phase 1: Utensils -->
+          <div class="flyout-field">
+            <label class="flyout-check" style="font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px">
+              <input type="checkbox" id="f-catering-utensils" style="accent-color:#E8651A;width:14px;height:14px" />
+              Include Utensils
+              <span style="font-size:10px;color:#aaa;font-weight:400;margin-left:2px">(EntityTypeTag)</span>
+            </label>
+            <p class="flyout-help-text" style="margin-top:4px">Declares that this item requires utensils for the guest.</p>
+          </div>
+
+          <!-- Phase 1: Item Type Tags -->
+          <div class="flyout-field">
+            <label class="flyout-label">ITEM TYPE TAGS</label>
+            <div class="flyout-checklist flyout-checklist-row">
+              <label class="flyout-check"><input type="checkbox" id="f-catering-tag-drinks" style="accent-color:#E8651A" /> DRINKS</label>
+              <label class="flyout-check"><input type="checkbox" id="f-catering-tag-utensils" style="accent-color:#E8651A" /> UTENSILS</label>
+            </div>
+            <p class="flyout-help-text">Used by ezCater to group and categorize items on their platform.</p>
+          </div>
+
+          <!-- Phase 1: Food Labeling Tags -->
+          <div class="flyout-field">
+            <label class="flyout-label">FOOD LABELING TAGS</label>
+            <div class="flyout-checklist" style="display:grid;grid-template-columns:1fr 1fr;gap:2px 8px">
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> VEGETARIAN</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> VEGAN</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> GLUTEN_FREE</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> SPICY</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> POPULAR</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> NEW</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> DAIRY_FREE</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> NUT_FREE</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> HALAL</label>
+              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> KOSHER</label>
+            </div>
+            <p class="flyout-help-text">Guest-facing dietary and labeling indicators.</p>
+          </div>
+
+          <!-- Phase 2 divider -->
+          <div style="margin:16px 0 10px 0;border-top:1px dashed #ddd;padding-top:10px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Phase 2 — Post-Launch</span>
+            <div style="flex:1;border-top:1px dashed #e0e0e0"></div>
+          </div>
+
+          <!-- Phase 2 wrapper -->
+          <div style="opacity:0.5;background:#f9f9f9;border:1px dashed #ddd;border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:10px">
+
+            <!-- Phase 2: Quantity Unit -->
+            <div class="flyout-field" style="margin-bottom:0">
+              <label class="flyout-label" style="display:flex;align-items:center;gap:6px">
+                QUANTITY UNIT
+                <span style="font-size:9px;font-weight:600;background:#e0e0e0;color:#777;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em">Phase 2</span>
+              </label>
+              <select class="flyout-select" id="f-catering-quantity-unit">
+                <option value="">— Select —</option>
+                <option>TACO</option>
+                <option>TRAY</option>
+                <option>HALF_GALLON</option>
+                <option>PIECE</option>
+                <option>BOX</option>
+                <option>BAG</option>
+                <option>DOZEN</option>
+                <option>PLATTER</option>
+              </select>
+              <p class="flyout-help-text">Defines the unit label for a single quantity of this item (e.g., "Tray", "Box"). Not required in the ezCater schema.</p>
+            </div>
+
+            <!-- Phase 2: Individual Wrap Status -->
+            <div class="flyout-field" style="margin-bottom:0">
+              <label class="flyout-label" style="display:flex;align-items:center;gap:6px">
+                INDIVIDUAL WRAP STATUS
+                <span style="font-size:9px;font-weight:600;background:#e0e0e0;color:#777;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em">Phase 2</span>
+              </label>
+              <select class="flyout-select" id="f-catering-wrap-status">
+                <option value="">— Select —</option>
+                <option>NIL</option>
+                <option>NEVER</option>
+                <option>POSSIBLE</option>
+                <option>WRAP</option>
+              </select>
+              <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to WRAP for single-serve items like boxed lunches. Not required in the ezCater schema.</p>
+            </div>
+
+          </div><!-- /phase 2 wrapper -->
+
+          <!-- Footnote -->
+          <p style="font-size:11px;color:#aaa;margin:12px 0 0 0;font-style:italic;line-height:1.4">Note: Choice-level tags (ChoiceTypeTags) apply on individual modifier choices, not at the item level.</p>
+
+        </div>
+
+      </div><!-- /details -->
+
+      <!-- ── STOCK TAB ───────────────────────────────────────────── -->
+      <div id="flyout-tab-stock" class="flyout-tab-content">
+        <div class="flyout-field">
+          <label class="flyout-label">STOCK <span class="req">*</span></label>
+          <select class="flyout-select flyout-stock-select" id="f-stock">
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="limited">Limited</option>
+          </select>
+          <div class="flyout-stock-badge badge-in-stock" id="f-stock-badge">In Stock</div>
+        </div>
+      </div><!-- /stock -->
+
+    </div><!-- /flyout-body -->
+
+    <!-- Footer: Details -->
+    <div class="flyout-footer" id="flyout-footer-details">
+      <button class="flyout-btn-filled">SAVE</button>
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text flyout-cancel-btn">CANCEL</button>
+      <button class="flyout-btn-text flyout-delete-btn">DELETE</button>
+    </div>
+
+    <!-- Footer: Stock -->
+    <div class="flyout-footer" id="flyout-footer-stock" style="display:none">
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text flyout-cancel-btn">CANCEL</button>
+    </div>
+
+  </div><!-- /edit-flyout -->
+
+  <div id="catering-flyout" class="edit-flyout" style="display:none!important">
+
+    <div class="flyout-header">
+      <span class="flyout-title">Edit Catering Item</span>
+      <button class="flyout-close-btn" id="catering-flyout-close-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="flyout-tab-bar">
+      <button class="catering-tab active" data-catering-tab="details">DETAILS</button>
+      <button class="catering-tab" data-catering-tab="stock">STOCK</button>
+    </div>
+
+    <div class="flyout-body">
+
+      <!-- DETAILS TAB -->
+      <div id="catering-tab-details" class="flyout-tab-content active">
+
+        <div class="flyout-field">
+          <label class="flyout-label">ITEM NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="cf-item-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATERING NAME <span class="req">*</span></label>
+          <input type="text" class="flyout-input" id="cf-catering-name" />
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">PRICE <span class="req">*</span></label>
+          <div class="flyout-input-prefix">
+            <span class="flyout-prefix">$</span>
+            <input type="number" class="flyout-input flyout-input-no-left" id="cf-price" step="0.01" />
+          </div>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">CATERING TAX CATEGORY</label>
+          <select class="flyout-select" id="cf-tax-category">
+            <option value="">— Select —</option>
+            <option>BAKERY_ITEMS</option>
+            <option>CAKES_AND_PIES</option>
+            <option>CANDY</option>
+            <option>CHIPS_AND_SNACKS</option>
+            <option>COFFEE_TEA_MILK</option>
+            <option>DRESSINGS_AND_CONDIMENTS</option>
+            <option>EXEMPT</option>
+            <option>ICE_CREAM</option>
+            <option>MISCELLANEOUS</option>
+            <option>NON_SODA_DRINKS</option>
+            <option>PREPARED_FOOD</option>
+            <option>SANDWICHES</option>
+            <option>SODA</option>
+            <option>WATER</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-label">QUANTITY UNIT</label>
+          <select class="flyout-select" id="cf-quantity-unit">
+            <option value="">— Select —</option>
+            <option>BAR</option>
+            <option>BOTTLE</option>
+            <option>BOWL</option>
+            <option>BOX</option>
+            <option>BUFFET</option>
+            <option>CAKE</option>
+            <option>CAN</option>
+            <option>CARAFE</option>
+            <option>DOZEN</option>
+            <option>FOOT</option>
+            <option>FULL_PAN</option>
+            <option>GALLON</option>
+            <option>HALF_GALLON</option>
+            <option>HALF_PAN</option>
+            <option>ITEM</option>
+            <option>KIT</option>
+            <option>LITER</option>
+            <option>PACKAGE</option>
+            <option>PAN</option>
+            <option>PERSON</option>
+            <option>PIE</option>
+            <option>PIECE</option>
+            <option>PINT</option>
+            <option>PIZZA</option>
+            <option>PLATTER</option>
+            <option>POUND</option>
+            <option>QUART</option>
+            <option>ROLL</option>
+            <option>SIX_PACK</option>
+            <option>SKEWER</option>
+            <option>SLIDER</option>
+            <option>TACO</option>
+            <option>TRAY</option>
+            <option>TWELVE_PACK</option>
+            <option>TWO_LITER</option>
+          </select>
+        </div>
+
+        <div class="flyout-field">
+          <label class="flyout-check" style="font-size:13px;font-weight:500">
+            <input type="checkbox" id="cf-utensils" style="accent-color:#E8651A;width:14px;height:14px" />
+            Utensils
+          </label>
+        </div>
+
+      </div><!-- /details -->
+
+      <!-- STOCK TAB -->
+      <div id="catering-tab-stock" class="flyout-tab-content">
+        <div class="flyout-field">
+          <label class="flyout-label">STOCK <span class="req">*</span></label>
+          <select class="flyout-select flyout-stock-select" id="cf-stock">
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="limited">Limited</option>
+          </select>
+          <div class="flyout-stock-badge badge-in-stock" id="cf-stock-badge">In Stock</div>
+        </div>
+      </div><!-- /stock -->
+
+    </div><!-- /flyout-body -->
+
+    <div class="flyout-footer" id="catering-footer-details">
+      <button class="flyout-btn-filled">SAVE</button>
+      <button class="flyout-btn-text catering-cancel-btn">CANCEL</button>
+    </div>
+
+    <div class="flyout-footer" id="catering-footer-stock" style="display:none">
+      <button class="flyout-btn-filled">PUBLISH</button>
+      <button class="flyout-btn-text catering-cancel-btn">CANCEL</button>
+    </div>
+
+  </div><!-- /catering-flyout -->
+
+  <script src="app.js"></script>
+</body>
+</html>
