@@ -355,6 +355,13 @@
         </div>
 
         <div class="flyout-field">
+          <label class="flyout-label">SIZES <span class="flyout-tooltip">?</span></label>
+          <p class="flyout-help-text" style="margin-bottom:8px">Define size variants for this item, each with a name, how many people it serves, and a price.</p>
+          <div id="sizes-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+          <button type="button" class="flyout-btn-text" id="add-size-btn" style="font-size:12px;padding:0;color:#E8651A;font-weight:600">+ Add Size</button>
+        </div>
+
+        <div class="flyout-field">
           <label class="flyout-label">PREP TICKET NAME <span class="flyout-tooltip">?</span></label>
           <input type="text" class="flyout-input" id="f-prep-ticket" />
         </div>
@@ -446,13 +453,13 @@
           </div>
           <p style="font-size:11px;color:#888;margin:0 0 12px 0;padding:0 2px;line-height:1.4">These fields are sent to ezCater when this item is published to the catering marketplace.</p>
 
-          <!-- Phase 1: Catering Name -->
+          <!-- Catering Name -->
           <div class="flyout-field">
             <label class="flyout-label">CATERING NAME</label>
             <input type="text" class="flyout-input" id="f-catering-name" placeholder="Display name for catering orders" />
           </div>
 
-          <!-- Phase 1: Tax Category -->
+          <!-- Tax Category -->
           <div class="flyout-field">
             <label class="flyout-label">TAX CATEGORY</label>
             <select class="flyout-select" id="f-catering-tax-category">
@@ -469,24 +476,7 @@
             <p class="flyout-help-text">Classification for tax purposes. Actual tax rates are configured in the ezCater portal.</p>
           </div>
 
-          <!-- Phase 1: Serves -->
-          <div class="flyout-field">
-            <label class="flyout-label">SERVES (NUMBER OF PEOPLE)</label>
-            <input type="number" class="flyout-input" id="f-catering-serves" min="1" step="1" placeholder="e.g. 10" style="width:120px" />
-            <p class="flyout-help-text">Indicates how many people this item feeds. Helps guests understand portion size when ordering.</p>
-          </div>
-
-          <!-- Phase 1: Utensils -->
-          <div class="flyout-field">
-            <label class="flyout-check" style="font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px">
-              <input type="checkbox" id="f-catering-utensils" style="accent-color:#E8651A;width:14px;height:14px" />
-              Include Utensils
-              <span style="font-size:10px;color:#aaa;font-weight:400;margin-left:2px">(EntityTypeTag)</span>
-            </label>
-            <p class="flyout-help-text" style="margin-top:4px">Declares that this item requires utensils for the guest.</p>
-          </div>
-
-          <!-- Phase 1: Item Type Tags -->
+          <!-- Item Type Tags -->
           <div class="flyout-field">
             <label class="flyout-label">ITEM TYPE TAGS</label>
             <div class="flyout-checklist flyout-checklist-row">
@@ -495,73 +485,38 @@
               <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="DESSERT" style="accent-color:#E8651A" /> DESSERT</label>
               <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="ICE" style="accent-color:#E8651A" /> ICE</label>
             </div>
-            <p class="flyout-help-text">Used by ezCater to group and categorize items on their platform.</p>
+            <p class="flyout-help-text">Signals to ezCater what type of item this is, so it can suggest it as an upsell if that category is not yet present in the customer's order.</p>
           </div>
 
-          <!-- Phase 1: Food Labeling Tags -->
+          <!-- Quantity Unit -->
           <div class="flyout-field">
-            <label class="flyout-label">FOOD LABELING TAGS</label>
-            <div class="flyout-checklist" style="display:grid;grid-template-columns:1fr 1fr;gap:2px 8px">
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> VEGETARIAN</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> VEGAN</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> GLUTEN_FREE</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> SPICY</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> POPULAR</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> NEW</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> DAIRY_FREE</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> NUT_FREE</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> HALAL</label>
-              <label class="flyout-check"><input type="checkbox" style="accent-color:#E8651A" /> KOSHER</label>
-            </div>
-            <p class="flyout-help-text">Guest-facing dietary and labeling indicators.</p>
+            <label class="flyout-label">QUANTITY UNIT</label>
+            <select class="flyout-select" id="f-catering-quantity-unit">
+              <option value="">— Select —</option>
+              <option>TACO</option>
+              <option>TRAY</option>
+              <option>HALF_GALLON</option>
+              <option>PIECE</option>
+              <option>BOX</option>
+              <option>BAG</option>
+              <option>DOZEN</option>
+              <option>PLATTER</option>
+            </select>
+            <p class="flyout-help-text">Defines the unit label for a single quantity of this item (e.g., "Tray", "Box").</p>
           </div>
 
-          <!-- Phase 2 divider -->
-          <div style="margin:16px 0 10px 0;border-top:1px dashed #ddd;padding-top:10px;display:flex;align-items:center;gap:8px">
-            <span style="font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Phase 2 — Post-Launch</span>
-            <div style="flex:1;border-top:1px dashed #e0e0e0"></div>
+          <!-- Individual Wrap Status -->
+          <div class="flyout-field">
+            <label class="flyout-label">INDIVIDUAL WRAP STATUS</label>
+            <select class="flyout-select" id="f-catering-wrap-status">
+              <option value="">— Select —</option>
+              <option>NIL</option>
+              <option>NEVER</option>
+              <option>POSSIBLE</option>
+              <option>WRAP</option>
+            </select>
+            <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to WRAP for single-serve items like boxed lunches.</p>
           </div>
-
-          <!-- Phase 2 wrapper -->
-          <div style="opacity:0.5;background:#f9f9f9;border:1px dashed #ddd;border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:10px">
-
-            <!-- Phase 2: Quantity Unit -->
-            <div class="flyout-field" style="margin-bottom:0">
-              <label class="flyout-label" style="display:flex;align-items:center;gap:6px">
-                QUANTITY UNIT
-                <span style="font-size:9px;font-weight:600;background:#e0e0e0;color:#777;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em">Phase 2</span>
-              </label>
-              <select class="flyout-select" id="f-catering-quantity-unit">
-                <option value="">— Select —</option>
-                <option>TACO</option>
-                <option>TRAY</option>
-                <option>HALF_GALLON</option>
-                <option>PIECE</option>
-                <option>BOX</option>
-                <option>BAG</option>
-                <option>DOZEN</option>
-                <option>PLATTER</option>
-              </select>
-              <p class="flyout-help-text">Defines the unit label for a single quantity of this item (e.g., "Tray", "Box"). Not required in the ezCater schema.</p>
-            </div>
-
-            <!-- Phase 2: Individual Wrap Status -->
-            <div class="flyout-field" style="margin-bottom:0">
-              <label class="flyout-label" style="display:flex;align-items:center;gap:6px">
-                INDIVIDUAL WRAP STATUS
-                <span style="font-size:9px;font-weight:600;background:#e0e0e0;color:#777;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em">Phase 2</span>
-              </label>
-              <select class="flyout-select" id="f-catering-wrap-status">
-                <option value="">— Select —</option>
-                <option>NIL</option>
-                <option>NEVER</option>
-                <option>POSSIBLE</option>
-                <option>WRAP</option>
-              </select>
-              <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to WRAP for single-serve items like boxed lunches. Not required in the ezCater schema.</p>
-            </div>
-
-          </div><!-- /phase 2 wrapper -->
 
           <!-- Footnote -->
           <p style="font-size:11px;color:#aaa;margin:12px 0 0 0;font-style:italic;line-height:1.4">Note: Choice-level tags (ChoiceTypeTags) apply on individual modifier choices, not at the item level.</p>
@@ -738,5 +693,27 @@
   </div><!-- /catering-flyout -->
 
   <script src="app.js"></script>
+  <script>
+    // ── SIZES ──────────────────────────────────────────────────────────
+    function createSizeRow() {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:6px';
+      row.innerHTML = `
+        <input type="text"   class="flyout-input" placeholder="Name (e.g. Half Tray)"  style="flex:2;min-width:0" />
+        <input type="number" class="flyout-input" placeholder="Serves" min="1" step="1" style="flex:1;min-width:0" title="Number of people this size serves" />
+        <div class="flyout-input-prefix" style="flex:1;min-width:0">
+          <span class="flyout-prefix">$</span>
+          <input type="number" class="flyout-input flyout-input-no-left" placeholder="0.00" step="0.01" min="0" />
+        </div>
+        <button type="button" class="mod-remove size-remove-btn" title="Remove size">✕</button>
+      `;
+      row.querySelector('.size-remove-btn').addEventListener('click', () => row.remove());
+      return row;
+    }
+
+    document.getElementById('add-size-btn').addEventListener('click', () => {
+      document.getElementById('sizes-list').appendChild(createSizeRow());
+    });
+  </script>
 </body>
 </html>
