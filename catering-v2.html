@@ -431,9 +431,27 @@
 
         <div class="flyout-field">
           <label class="flyout-label">SIZES <span class="flyout-tooltip">?</span></label>
-          <p class="flyout-help-text" style="margin-bottom:8px">Define size variants for this item, each with a name, how many people it serves, and a price.</p>
-          <div id="sizes-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
-          <button type="button" class="flyout-btn-text" id="add-size-btn" style="font-size:12px;padding:0;color:#E8651A;font-weight:600">+ Add Size</button>
+
+          <!-- Simple mode: just a Serves number -->
+          <div id="sizes-simple">
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="number" class="flyout-input" id="f-serves-simple" min="1" step="1" placeholder="e.g. 10" style="width:100px" />
+              <span style="font-size:12px;color:#aaa">people</span>
+            </div>
+            <button type="button" id="sizes-expand-btn" style="margin-top:6px;font-size:12px;padding:0;color:#E8651A;font-weight:600;background:none;border:none;cursor:pointer">+ Add size variations</button>
+          </div>
+
+          <!-- Variation mode: size builder -->
+          <div id="sizes-variations" style="display:none">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 20px;gap:4px;margin-bottom:4px;padding:0 2px">
+              <span style="font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.04em">Name</span>
+              <span style="font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.04em">Serves</span>
+              <span style="font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.04em">Price</span>
+              <span></span>
+            </div>
+            <div id="sizes-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+            <button type="button" class="flyout-btn-text" id="add-size-btn" style="font-size:12px;padding:0;color:#E8651A;font-weight:600">+ Add size</button>
+          </div>
         </div>
 
         <div class="flyout-field">
@@ -848,24 +866,43 @@
     renderItems();
 
     // ── SIZES ──────────────────────────────────────────────────────────
-    function createSizeRow() {
+    const sizesSimple     = document.getElementById('sizes-simple');
+    const sizesVariations = document.getElementById('sizes-variations');
+    const sizesList       = document.getElementById('sizes-list');
+
+    function createSizeRow(servesValue) {
       const row = document.createElement('div');
-      row.style.cssText = 'display:flex;align-items:center;gap:6px';
+      row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 20px;gap:6px;align-items:center';
       row.innerHTML = `
-        <input type="text"   class="flyout-input" placeholder="Name (e.g. Half Tray)"  style="flex:2;min-width:0" />
-        <input type="number" class="flyout-input" placeholder="Serves" min="1" step="1" style="flex:1;min-width:0" title="Number of people this size serves" />
-        <div class="flyout-input-prefix" style="flex:1;min-width:0">
+        <input type="text"   class="flyout-input" placeholder="e.g. Half Tray" style="min-width:0" />
+        <input type="number" class="flyout-input" placeholder="10" min="1" step="1" style="min-width:0" value="${servesValue || ''}" />
+        <div class="flyout-input-prefix" style="min-width:0">
           <span class="flyout-prefix">$</span>
           <input type="number" class="flyout-input flyout-input-no-left" placeholder="0.00" step="0.01" min="0" />
         </div>
-        <button type="button" class="mod-remove size-remove-btn" title="Remove size">✕</button>
+        <button type="button" class="mod-remove size-remove-btn" title="Remove">✕</button>
       `;
-      row.querySelector('.size-remove-btn').addEventListener('click', () => row.remove());
+      row.querySelector('.size-remove-btn').addEventListener('click', () => {
+        row.remove();
+        // revert to simple mode when last row is removed
+        if (sizesList.children.length === 0) {
+          sizesVariations.style.display = 'none';
+          sizesSimple.style.display = '';
+        }
+      });
       return row;
     }
 
+    // Expand: carry the current Serves value into the first row
+    document.getElementById('sizes-expand-btn').addEventListener('click', () => {
+      const currentServes = document.getElementById('f-serves-simple').value;
+      sizesSimple.style.display = 'none';
+      sizesVariations.style.display = '';
+      sizesList.appendChild(createSizeRow(currentServes));
+    });
+
     document.getElementById('add-size-btn').addEventListener('click', () => {
-      document.getElementById('sizes-list').appendChild(createSizeRow());
+      sizesList.appendChild(createSizeRow());
     });
   </script>
 </body>
