@@ -584,6 +584,17 @@
             <input type="text" class="flyout-input" id="f-catering-name" placeholder="Display name for catering orders" />
           </div>
 
+          <!-- Serves (single size only) -->
+          <div class="flyout-field">
+            <label class="flyout-label">SERVES</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:#888;white-space:nowrap;font-weight:500">Serves</span>
+              <input type="number" class="flyout-input" id="f-serves-simple" min="1" step="1" placeholder="e.g. 10" style="width:90px" />
+              <span style="font-size:12px;color:#aaa;white-space:nowrap">people</span>
+            </div>
+            <p class="flyout-help-text">For multiple size options (e.g. Half Tray, Full Tray), create each size as a separate item.</p>
+          </div>
+
           <!-- Tax Category -->
           <div class="flyout-field">
             <label class="flyout-label">TAX CATEGORY</label>
@@ -614,7 +625,7 @@
           </div>
 
           <!-- Quantity Unit -->
-          <div class="flyout-field" style="background:#fffbf0;border:1.5px solid #f5c842;border-radius:6px;padding:10px 12px;margin-left:-12px;margin-right:-12px">
+          <div class="flyout-field">
             <label class="flyout-label">QUANTITY UNIT</label>
             <select class="flyout-select" id="f-catering-quantity-unit">
               <option value="">— Select —</option>
@@ -631,7 +642,7 @@
           </div>
 
           <!-- Individual Wrap Status -->
-          <div class="flyout-field" style="background:#fffbf0;border:1.5px solid #f5c842;border-radius:6px;padding:10px 12px;margin-left:-12px;margin-right:-12px">
+          <div class="flyout-field">
             <label class="flyout-label">INDIVIDUAL WRAP STATUS</label>
             <select class="flyout-select" id="f-catering-wrap-status">
               <option value="">— Select —</option>
@@ -641,17 +652,6 @@
               <option>WRAP</option>
             </select>
             <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to WRAP for single-serve items like boxed lunches.</p>
-          </div>
-
-          <!-- Serves (single size only) -->
-          <div class="flyout-field" style="margin-bottom:0">
-            <label class="flyout-label">SERVES</label>
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:12px;color:#888;white-space:nowrap;font-weight:500">Serves</span>
-              <input type="number" class="flyout-input" id="f-serves-simple" min="1" step="1" placeholder="e.g. 10" style="width:90px" />
-              <span style="font-size:12px;color:#aaa;white-space:nowrap">people</span>
-            </div>
-            <p class="flyout-help-text">For multiple size options (e.g. Half Tray, Full Tray), create each size as a separate item.</p>
           </div>
 
           <!-- Footnote -->
