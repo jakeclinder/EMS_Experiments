@@ -151,9 +151,62 @@
         </div>
 
         <div class="toolbar">
-          <div class="view-toggle">
-            <button class="view-btn active" data-view="grid">Grid View</button>
-            <button class="view-btn" data-view="pos">POS View</button>
+          <div class="toolbar-left">
+            <div class="view-toggle">
+              <button class="view-btn active" data-view="grid">Grid View</button>
+              <button class="view-btn" data-view="pos">POS View</button>
+            </div>
+            <div class="filter-wrap" id="filter-wrap">
+              <button class="filter-btn" id="filter-btn" title="Filter">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="6" y2="6"/><circle cx="8" cy="6" r="2"/><line x1="10" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="14" y2="18"/><circle cx="16" cy="18" r="2"/><line x1="18" y1="18" x2="20" y2="18"/></svg>
+                Filter
+                <span class="filter-badge" id="filter-badge"></span>
+              </button>
+              <div class="filter-panel" id="filter-panel">
+                <div class="filter-panel-left">
+                  <div class="filter-category active" data-category="display-on">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    Display On
+                  </div>
+                </div>
+                <div class="filter-panel-right">
+                  <div class="filter-search-box">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="filter-search-input" placeholder="Search" id="filter-search" />
+                  </div>
+                  <div class="filter-options" id="filter-options">
+                    <label class="filter-option">
+                      <input type="checkbox" value="all" id="filter-all" />
+                      <span class="filter-option-check"></span>
+                      All
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="pos" id="filter-pos" />
+                      <span class="filter-option-check"></span>
+                      POS
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="olo" id="filter-olo" />
+                      <span class="filter-option-check"></span>
+                      OLO
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="kiosk" id="filter-kiosk" />
+                      <span class="filter-option-check"></span>
+                      Kiosk
+                    </label>
+                    <label class="filter-option">
+                      <input type="checkbox" value="catering" id="filter-catering" />
+                      <span class="filter-option-check"></span>
+                      Catering
+                    </label>
+                  </div>
+                  <div class="filter-panel-footer">
+                    <button class="filter-apply-btn" id="filter-apply">APPLY</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="toolbar-right">
             <div class="search-box">
@@ -165,6 +218,8 @@
             </button>
           </div>
         </div>
+
+        <div class="filter-chips-row" id="filter-chips-row"></div>
 
         <table class="data-table">
           <thead>
@@ -392,12 +447,12 @@
           <label class="flyout-label">STATIONS</label>
           <div class="flyout-tags-input">
             <span class="flyout-tag">KITCHEN <button class="tag-remove">✕</button></span>
-            <span class="flyout-tag">LABEL <button class="tag-remove">✕</button></span>
             <select class="flyout-tag-select">
               <option value="">+ Add Station</option>
               <option>BAR</option>
               <option>EXPO</option>
               <option>GRILL</option>
+              <option>LABEL</option>
             </select>
           </div>
         </div>
@@ -407,8 +462,10 @@
           <table class="flyout-mod-table">
             <thead>
               <tr>
-                <th>Name</th><th>Req</th><th>Min</th><th>Max</th>
-                <th>POS</th><th>OLO</th><th>KSK</th><th>CAT</th><th></th><th></th>
+                <th style="text-align:left">Name</th>
+                <th>Req</th><th>Min</th><th>Max</th>
+                <th>POS</th><th>OLO</th><th>KSK</th><th>CAT</th>
+                <th></th><th></th>
               </tr>
             </thead>
             <tbody>
@@ -847,6 +904,125 @@
         renderItems();
       });
     });
+
+    // ── Toolbar Filter Panel ─────────────────────────────────────────────
+    (function () {
+      const btn       = document.getElementById('filter-btn');
+      const panel     = document.getElementById('filter-panel');
+      const badge     = document.getElementById('filter-badge');
+      const applyBtn  = document.getElementById('filter-apply');
+      const chipsRow  = document.getElementById('filter-chips-row');
+      const allCb     = document.getElementById('filter-all');
+      const channelCbs = ['pos','olo','kiosk','catering'].map(v => document.getElementById('filter-' + v));
+      const searchInput = document.getElementById('filter-search');
+
+      // Applied state (only updated on APPLY)
+      let appliedChannels = new Set();
+
+      // Pending state (while panel is open)
+      let pendingChannels = new Set();
+
+      function syncAllCheckbox() {
+        const allChecked = channelCbs.every(cb => cb.checked);
+        const someChecked = channelCbs.some(cb => cb.checked);
+        allCb.checked = allChecked;
+        allCb.indeterminate = someChecked && !allChecked;
+      }
+
+      function loadPendingIntoCbs() {
+        channelCbs.forEach(cb => {
+          cb.checked = pendingChannels.has(cb.value);
+        });
+        syncAllCheckbox();
+      }
+
+      // "All" checkbox toggles all channel checkboxes
+      allCb.addEventListener('change', () => {
+        channelCbs.forEach(cb => { cb.checked = allCb.checked; });
+        allCb.indeterminate = false;
+      });
+
+      channelCbs.forEach(cb => {
+        cb.addEventListener('change', syncAllCheckbox);
+      });
+
+      // Search filtering in the options list
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.toLowerCase();
+        document.querySelectorAll('#filter-options .filter-option').forEach(opt => {
+          const label = opt.textContent.trim().toLowerCase();
+          opt.style.display = label.includes(q) || label === 'all' ? '' : 'none';
+        });
+      });
+
+      function openPanel() {
+        // Load applied state into pending
+        pendingChannels = new Set(appliedChannels);
+        loadPendingIntoCbs();
+        searchInput.value = '';
+        document.querySelectorAll('#filter-options .filter-option').forEach(opt => opt.style.display = '');
+        panel.classList.add('open');
+        btn.classList.add('active');
+      }
+
+      function closePanel() {
+        panel.classList.remove('open');
+        btn.classList.remove('active');
+      }
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        panel.classList.contains('open') ? closePanel() : openPanel();
+      });
+
+      document.addEventListener('click', () => closePanel());
+      panel.addEventListener('click', e => e.stopPropagation());
+
+      applyBtn.addEventListener('click', () => {
+        // Collect checked channels
+        appliedChannels = new Set();
+        channelCbs.forEach(cb => { if (cb.checked) appliedChannels.add(cb.value); });
+        closePanel();
+        renderChips();
+        updateBadge();
+      });
+
+      function updateBadge() {
+        badge.classList.toggle('visible', appliedChannels.size > 0);
+      }
+
+      function renderChips() {
+        chipsRow.innerHTML = '';
+        if (appliedChannels.size === 0) return;
+
+        const labels = { pos: 'POS', olo: 'OLO', kiosk: 'Kiosk', catering: 'Catering' };
+        const selected = [...appliedChannels].map(v => labels[v] || v).join(', ');
+
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip';
+        chip.innerHTML = `<span>Display On: ${selected}</span><button class="filter-chip-remove" title="Remove filter">&#x2715;</button>`;
+        chip.querySelector('.filter-chip-remove').addEventListener('click', () => {
+          appliedChannels.clear();
+          channelCbs.forEach(cb => cb.checked = false);
+          allCb.checked = false;
+          renderChips();
+          updateBadge();
+        });
+        chipsRow.appendChild(chip);
+
+        const reset = document.createElement('button');
+        reset.className = 'filter-reset';
+        reset.innerHTML = `Reset <span>&#x2715;</span>`;
+        reset.addEventListener('click', () => {
+          appliedChannels.clear();
+          channelCbs.forEach(cb => cb.checked = false);
+          allCb.checked = false;
+          renderChips();
+          updateBadge();
+        });
+        chipsRow.appendChild(reset);
+      }
+    })();
 
     // Re-render now that the override is in place
     renderItems();
