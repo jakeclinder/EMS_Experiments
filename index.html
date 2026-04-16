@@ -563,7 +563,7 @@
 
         <div class="flyout-field">
           <label class="flyout-label">SHOW THIS ITEM ON <span class="flyout-tooltip">?</span></label>
-          <div class="flyout-checklist flyout-checklist-row">
+          <div class="flyout-checklist">
             <label class="flyout-check"><input type="checkbox" id="f-show-pos" /> POS</label>
             <label class="flyout-check"><input type="checkbox" id="f-show-olo" /> OLO</label>
             <label class="flyout-check"><input type="checkbox" id="f-show-kiosk" /> KIOSK</label>
@@ -574,9 +574,9 @@
         <!-- Catering-only fields — shown when CATERING is checked -->
         <div id="catering-fields-section" class="catering-fields-section" style="display:none">
           <div class="catering-fields-divider">
-            <span>CATERING PROPERTIES (ezCater)</span>
+            <span>CATERING PROPERTIES</span>
           </div>
-          <p style="font-size:11px;color:#888;margin:0 0 12px 0;padding:0 2px;line-height:1.4">These fields are sent to ezCater when this item is published to the catering marketplace.</p>
+          <p style="font-size:11px;color:#888;margin:0 0 12px 0;padding:0 2px;line-height:1.4">These fields are sent to ezCater when this item is published to the catering marketplace. This functionality requires CAKE's ezCater integration.</p>
 
           <!-- Catering Name -->
           <div class="flyout-field">
@@ -597,29 +597,35 @@
 
           <!-- Tax Category -->
           <div class="flyout-field">
-            <label class="flyout-label">TAX CATEGORY</label>
-            <select class="flyout-select" id="f-catering-tax-category">
+            <label class="flyout-label">TAX CATEGORY <span class="req">*</span></label>
+            <select class="flyout-select" id="f-catering-tax-category" required>
               <option value="">— Select —</option>
-              <option>PREPARED_FOOD</option>
-              <option>SANDWICHES</option>
-              <option>NON_SODA_DRINKS</option>
-              <option>COFFEE_TEA_MILK</option>
-              <option>WATER</option>
-              <option>BAKERY_ITEMS</option>
-              <option>CANDY</option>
-              <option>SODA</option>
+              <option value="PREPARED_FOOD">Prepared Food</option>
+              <option value="SANDWICHES">Sandwiches</option>
+              <option value="BAKERY_ITEMS">Bakery Items</option>
+              <option value="CANDY">Candy</option>
+              <option value="WATER">Water</option>
+              <option value="COFFEE_TEA_MILK">Coffee Tea Milk</option>
+              <option value="SODA">Soda</option>
+              <option value="NON_SODA_DRINKS">Non-Soda Drinks</option>
+              <option value="CAKES_AND_PIES">Cakes and Pies</option>
+              <option value="CHIPS_AND_SNACKS">Chips and Snacks</option>
+              <option value="DRESSINGS_AND_CONDIMENTS">Dressings and Condiments</option>
+              <option value="EXEMPT">Exempt</option>
+              <option value="ICE_CREAM">Ice Cream</option>
+              <option value="MISCELLANEOUS">Miscellaneous</option>
             </select>
-            <p class="flyout-help-text">Classification for tax purposes. Actual tax rates are configured in the ezCater portal.</p>
+            <p class="flyout-help-text">Classification for tax purposes. Actual tax rates are configured by ezCater.</p>
           </div>
 
           <!-- Item Type Tags -->
           <div class="flyout-field">
             <label class="flyout-label">ITEM TYPE TAGS</label>
             <div class="flyout-checklist flyout-checklist-row">
-              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="DRINKS" style="accent-color:#E8651A" /> DRINKS</label>
-              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="UTENSILS" style="accent-color:#E8651A" /> UTENSILS</label>
-              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="DESSERT" style="accent-color:#E8651A" /> DESSERT</label>
-              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="ICE" style="accent-color:#E8651A" /> ICE</label>
+              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="DRINKS" style="accent-color:#E8651A" /> Drinks</label>
+              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="UTENSILS" style="accent-color:#E8651A" /> Utensils</label>
+              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="DESSERT" style="accent-color:#E8651A" /> Dessert</label>
+              <label class="flyout-check"><input type="radio" name="f-catering-item-type-tag" value="ICE" style="accent-color:#E8651A" /> Ice</label>
             </div>
             <p class="flyout-help-text">Signals to ezCater what type of item this is, so it can suggest it as an upsell if that category is not yet present in the customer's order.</p>
           </div>
@@ -629,14 +635,41 @@
             <label class="flyout-label">QUANTITY UNIT</label>
             <select class="flyout-select" id="f-catering-quantity-unit">
               <option value="">— Select —</option>
-              <option>TACO</option>
-              <option>TRAY</option>
-              <option>HALF_GALLON</option>
-              <option>PIECE</option>
-              <option>BOX</option>
-              <option>BAG</option>
-              <option>DOZEN</option>
-              <option>PLATTER</option>
+              <option value="BAR">Bar</option>
+              <option value="BOTTLE">Bottle</option>
+              <option value="BOWL">Bowl</option>
+              <option value="BOX">Box</option>
+              <option value="BUFFET">Buffet</option>
+              <option value="CAKE">Cake</option>
+              <option value="CAN">Can</option>
+              <option value="CARAFE">Carafe</option>
+              <option value="DOZEN">Dozen</option>
+              <option value="FOOT">Foot</option>
+              <option value="FULL_PAN">Full Pan</option>
+              <option value="GALLON">Gallon</option>
+              <option value="HALF_GALLON">Half Gallon</option>
+              <option value="HALF_PAN">Half Pan</option>
+              <option value="ITEM">Item</option>
+              <option value="KIT">Kit</option>
+              <option value="LITER">Liter</option>
+              <option value="PACKAGE">Package</option>
+              <option value="PAN">Pan</option>
+              <option value="PERSON">Person</option>
+              <option value="PIE">Pie</option>
+              <option value="PIECE">Piece</option>
+              <option value="PINT">Pint</option>
+              <option value="PIZZA">Pizza</option>
+              <option value="PLATTER">Platter</option>
+              <option value="POUND">Pound</option>
+              <option value="QUART">Quart</option>
+              <option value="ROLL">Roll</option>
+              <option value="SIX_PACK">Six Pack</option>
+              <option value="SKEWER">Skewer</option>
+              <option value="SLIDER">Slider</option>
+              <option value="TACO">Taco</option>
+              <option value="TRAY">Tray</option>
+              <option value="TWELVE_PACK">Twelve Pack</option>
+              <option value="TWO_LITER">Two Liter</option>
             </select>
             <p class="flyout-help-text">Defines the unit label for a single quantity of this item (e.g., "Tray", "Box").</p>
           </div>
@@ -646,12 +679,11 @@
             <label class="flyout-label">INDIVIDUAL WRAP STATUS</label>
             <select class="flyout-select" id="f-catering-wrap-status">
               <option value="">— Select —</option>
-              <option>NIL</option>
-              <option>NEVER</option>
-              <option>POSSIBLE</option>
-              <option>WRAP</option>
+              <option value="NEVER">Not Allowed</option>
+              <option value="POSSIBLE">Optional</option>
+              <option value="WRAP">Always Wrapped</option>
             </select>
-            <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to WRAP for single-serve items like boxed lunches.</p>
+            <p class="flyout-help-text">Indicates whether this item can be individually wrapped. Set to Always Wrapped for single-serve items like boxed lunches.</p>
           </div>
 
           <!-- Footnote -->
